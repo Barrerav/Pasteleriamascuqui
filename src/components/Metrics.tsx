@@ -45,6 +45,18 @@ export default function Metrics() {
   const [active, setActive] = useState(false);
 
   useEffect(() => {
+    const el = sectionRef.current;
+    if (!el) return;
+
+    // Si ya es visible al montar → arrancar inmediatamente
+    const rect = el.getBoundingClientRect();
+    if (rect.top < window.innerHeight && rect.bottom > 0) {
+      setActive(true);
+      el.classList.add('visible');
+      el.querySelectorAll('.reveal').forEach((r) => r.classList.add('visible'));
+      return;
+    }
+
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -57,10 +69,16 @@ export default function Metrics() {
       { threshold: 0.3 }
     );
 
-    const el = sectionRef.current;
-    if (el) observer.observe(el);
-    sectionRef.current?.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
+    observer.observe(el);
+    el.querySelectorAll('.reveal').forEach((r) => observer.observe(r));
+
+    // Fallback: si el observer no dispara en 2s, animar igualmente
+    const timer = setTimeout(() => setActive(true), 2000);
+
+    return () => {
+      observer.disconnect();
+      clearTimeout(timer);
+    };
   }, []);
 
   return (

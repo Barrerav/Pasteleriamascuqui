@@ -1,6 +1,8 @@
 'use client';
 
+import Image from 'next/image';
 import { profile } from '@/data/profile';
+import { servicePhotoMap } from '@/data/photos';
 import { useReveal } from '@/hooks/useReveal';
 import { ServiceIcon, WhatsAppIcon } from '@/components/Icons';
 
@@ -25,28 +27,42 @@ export default function Services() {
           {profile.services.map((service, i) => (
             <div
               key={service.title}
-              className={`reveal stagger-${i + 1} bg-white rounded-2xl p-6 shadow-sm border border-rose-light/30 hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col gap-4`}
+              className={`reveal stagger-${i + 1} bg-white rounded-2xl shadow-sm border border-rose-light/30 hover:shadow-md hover:-translate-y-1 transition-all duration-300 flex flex-col overflow-hidden`}
             >
-              <div className="w-14 h-14 rounded-2xl bg-pink-bg flex items-center justify-center text-rose">
-                <ServiceIcon name={service.icon} className="w-7 h-7" />
+              {/* Photo header */}
+              <div className="relative h-44 flex-shrink-0">
+                <Image
+                  src={servicePhotoMap[service.icon]}
+                  alt={service.title}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                />
               </div>
-              <div>
-                <h3 className="font-display text-lg font-bold text-brown-dark mb-2">{service.title}</h3>
-                <p className="text-sm text-brown/70 leading-relaxed">{service.description}</p>
-              </div>
-              <div className="mt-auto pt-2 flex items-center justify-between">
-                <span className="text-xs text-rose font-semibold bg-rose-light/50 px-3 py-1 rounded-full">
-                  {service.priceRange}
-                </span>
-                <a
-                  href={`https://wa.me/34${profile.whatsapp}?text=Hola!%20Me%20interesa%20${encodeURIComponent(service.title)}%20en%20M%C3%A1s%20Cuqui`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="text-xs text-brown/50 hover:text-rose transition-colors"
-                  aria-label={`Consultar ${service.title} por WhatsApp`}
-                >
-                  Consultar →
-                </a>
+
+              {/* Card body */}
+              <div className="p-6 flex flex-col gap-4 flex-1">
+                <div className="w-12 h-12 rounded-2xl bg-pink-bg flex items-center justify-center text-rose">
+                  <ServiceIcon name={service.icon} className="w-6 h-6" />
+                </div>
+                <div>
+                  <h3 className="font-display text-lg font-bold text-brown-dark mb-2">{service.title}</h3>
+                  <p className="text-sm text-brown/70 leading-relaxed">{service.description}</p>
+                </div>
+                <div className="mt-auto pt-2 flex items-center justify-between">
+                  <span className="text-xs text-rose font-semibold bg-rose-light/50 px-3 py-1 rounded-full">
+                    {service.priceRange}
+                  </span>
+                  <a
+                    href={`https://wa.me/34${profile.whatsapp}?text=Hola!%20Me%20interesa%20${encodeURIComponent(service.title)}%20en%20M%C3%A1s%20Cuqui`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-xs text-brown/50 hover:text-rose transition-colors"
+                    aria-label={`Consultar ${service.title} por WhatsApp`}
+                  >
+                    Consultar →
+                  </a>
+                </div>
               </div>
             </div>
           ))}
