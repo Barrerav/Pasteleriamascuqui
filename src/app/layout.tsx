@@ -18,7 +18,11 @@ const siteUrl = 'https://pasteleriamascuqui.com';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: 'Más Cuqui — Pastelería & Cafetería Artesanal en Ciudad Real',
+  title: '+Cuqui - Pastelería Creativa',
+  icons: {
+    icon: '/images/logo.png',
+    apple: '/images/logo.png',
+  },
   description:
     'Cafetería y pastelería artesanal en Ciudad Real. Tartas personalizadas, café de especialidad, desayunos y dulces venezolanos elaborados con amor desde 2022. Calle Tinte 17.',
   keywords: [
@@ -73,7 +77,7 @@ const jsonLd = {
   telephone: '+34641384941',
   email: '',
   image: `${siteUrl}/instagram/post-1.jpg`,
-  logo: `${siteUrl}/instagram/profile.jpg`,
+  logo: `${siteUrl}/images/logo.png`,
   address: {
     '@type': 'PostalAddress',
     streetAddress: 'Calle Tinte, 17 Bajo',

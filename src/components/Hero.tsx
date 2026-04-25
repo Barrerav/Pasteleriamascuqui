@@ -160,18 +160,34 @@ export default function Hero() {
 
         {/* Hero text */}
         <div className="flex-1 text-center lg:text-left space-y-6">
-          <div className="inline-block bg-rose-light/60 text-rose-dark text-sm font-semibold px-4 py-1.5 rounded-full">
-            <svg className="w-4 h-4 inline mr-1 -mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-              <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
-            </svg>
-            Obrador artesanal · Ciudad Real
+          {/* Business type pill */}
+          <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
+            <span className="inline-flex items-center gap-1.5 bg-rose text-white text-sm font-semibold px-4 py-1.5 rounded-full shadow-sm">
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.5 8.25A.75.75 0 015.25 7.5h13.5a.75.75 0 010 1.5H5.25A.75.75 0 014.5 8.25zM3 12.75A.75.75 0 013.75 12h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 12.75zM3 17.25A.75.75 0 013.75 16.5h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 17.25z" />
+              </svg>
+              Cafetería
+            </span>
+            <span className="inline-flex items-center gap-1.5 bg-gold text-white text-sm font-semibold px-4 py-1.5 rounded-full shadow-sm">
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12z" />
+              </svg>
+              Pastelería
+            </span>
+            <span className="inline-flex items-center gap-1.5 bg-rose-light text-rose-dark text-sm font-semibold px-4 py-1.5 rounded-full border border-rose/30">
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+              </svg>
+              Obrador artesanal propio
+            </span>
           </div>
+
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-brown-dark leading-tight">
             Donde todo se<br />
             <span className="text-rose">hace con amor</span>
           </h1>
           <p className="text-lg text-brown/80 max-w-md mx-auto lg:mx-0 leading-relaxed">
-            Pastelería artesanal venezolana en el corazón de Ciudad Real. Sabores que nacen del alma latina con maestría pastelera europea.
+            Pastelería artesanal en el corazón de Ciudad Real. Tartas personalizadas, desayunos, café de especialidad y dulces venezolanos elaborados cada día en nuestro obrador.
           </p>
 
           {/* Opening hours badge */}

@@ -31,18 +31,30 @@ export const profile = {
     { days: 'Domingos', hours: 'Cerrado' },
   ],
   posts: [
-    { src: '/instagram/post-1.jpg', alt: 'Iced lattes de verano' },
-    { src: '/instagram/post-2.jpg', alt: 'Desayuno artesanal' },
-    { src: '/instagram/post-3.jpg', alt: '4to Aniversario' },
-    { src: '/instagram/post-4.jpg', alt: 'Arte latte' },
-    { src: '/instagram/post-5.jpg', alt: 'Mocaccino vegetal' },
-    { src: '/instagram/post-6.jpg', alt: 'Cachitos venezolanos' },
-    { src: '/instagram/post-7.jpg', alt: 'Cappuccino rosa San Valentín' },
-    { src: '/instagram/post-8.jpg', alt: 'Obras en el local' },
-    { src: '/instagram/post-9.jpg', alt: 'Roscones de Reyes artesanales' },
-    { src: '/instagram/post-10.jpg', alt: 'Café con nosotros' },
-    { src: '/instagram/post-11.jpg', alt: 'Descubre Más Cuqui' },
-    { src: '/instagram/post-12.jpg', alt: 'Buen comienzo de mes' },
+    {
+      src: 'https://instagram.fmad10-2.fna.fbcdn.net/v/t51.75761-15/508658344_18047708018575080_8536942991416888830_n.jpg?stp=dst-jpg_e15_tt6&_nc_cat=108&ccb=7-5&_nc_sid=58cdad&_nc_ohc=YgxYY224L1EQ7kNvwH1QxCw&_nc_ht=instagram.fmad10-2.fna&oh=00_Af2HqJ1_pCB2reld3icW6Kd02a6SPnFNtxvmtLQxCGRFmQ&oe=69F28506',
+      alt: 'Iced lattes de verano',
+    },
+    {
+      src: 'https://instagram.fmad10-2.fna.fbcdn.net/v/t51.82787-15/673878682_18082223738575080_9150026602241163687_n.jpg?stp=dst-jpg_e15_tt6&_nc_cat=105&ccb=7-5&_nc_sid=58cdad&_nc_ohc=g7FQvb11CJIQ7kNvwHGCTIk&_nc_ht=instagram.fmad10-2.fna&oh=00_Af3TWYIarLVRkWo5YHPXPfoD_nbN9vpo2ildAPIYsSeMKw&oe=69F2A202',
+      alt: 'Desayuno artesanal con tostada de aguacate',
+    },
+    {
+      src: 'https://instagram.fmad10-2.fna.fbcdn.net/v/t51.82787-15/669990145_18081033707575080_2314124471537172451_n.jpg?stp=dst-jpg_e15_tt6&_nc_cat=104&ccb=7-5&_nc_sid=58cdad&_nc_ohc=6oVXCRayoLAQ7kNvwFQ8CHx&_nc_ht=instagram.fmad10-2.fna&oh=00_Af1_pXTyMEGjRZdX1Z3zHQhr5ToeNo8ZQO6xYsEL2EdsKQ&oe=69F2A15A',
+      alt: 'Tarta Tres Leches',
+    },
+    {
+      src: 'https://instagram.fmad22-1.fna.fbcdn.net/v/t51.82787-15/660140866_18080017697575080_7879539623579242890_n.jpg?stp=dst-jpg_e15_tt6&_nc_cat=109&ccb=7-5&_nc_sid=58cdad&_nc_ohc=U6TGb2vVF-EQ7kNvwFTr5Fv&_nc_ht=instagram.fmad22-1.fna&oh=00_Af0Rk0-bBlZmtbIxcgbF4UTMzXah8kp1NgXYHcssu_aWEg&oe=69F29AAC',
+      alt: 'Arte latte con dibujo de oso',
+    },
+    {
+      src: 'https://instagram.fmad22-1.fna.fbcdn.net/v/t51.82787-15/641739937_18074891600575080_2392720206104889424_n.jpg?stp=dst-jpg_e15_tt6&_nc_cat=106&ccb=7-5&_nc_sid=58cdad&_nc_ohc=IGPkbuZ2ouIQ7kNvwHnbmKK&_nc_ht=instagram.fmad22-1.fna&oh=00_Af0aK8m4knJAGcxauivWp2Ak94nwFhoqPBiZjst_60RmmQ&oe=69F27F64',
+      alt: 'Cachitos venezolanos artesanales',
+    },
+    {
+      src: 'https://instagram.fmad10-2.fna.fbcdn.net/v/t51.82787-15/610871662_18069696464575080_1450198419575252468_n.jpg?stp=dst-jpg_e15_tt6&_nc_cat=105&ccb=7-5&_nc_sid=58cdad&_nc_ohc=p7OEzdURzBgQ7kNvwHJV3WG&_nc_ht=instagram.fmad10-2.fna&oh=00_Af2nBgcdPaTxRLteg53N7XXFi2Rh0v7RQ3rUtyJKKeRJMA&oe=69F2933C',
+      alt: 'Roscones de Reyes artesanales',
+    },
   ],
   services: [
     {
