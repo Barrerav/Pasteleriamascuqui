@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useState, useCallback } from 'react';
+import Image from 'next/image';
 import { profile } from '@/data/profile';
 
 const links = [
@@ -71,8 +72,15 @@ export default function Navbar() {
         }`}
       >
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          <a href="#" className="font-display text-xl font-semibold text-brown-dark tracking-wide">
-            Más Cuqui
+          <a href="#" className="flex items-center">
+            <Image 
+              src="/images/logo.png" 
+              alt="Más Cuqui Logo" 
+              width={120} 
+              height={40} 
+              className="h-10 w-auto object-contain"
+              priority
+            />
           </a>
 
           {/* Desktop nav */}
