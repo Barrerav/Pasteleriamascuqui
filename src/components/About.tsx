@@ -9,15 +9,6 @@ import { MapPinIcon } from '@/components/Icons';
 export default function About() {
   const sectionRef = useReveal(0.15);
 
-  const badges = [
-    'Obrador artesanal propio',
-    'Fusión venezolano-europea',
-    'Ingredientes de calidad',
-    'Todo elaborado desde cero',
-    'Café de especialidad',
-    'Pedidos personalizados',
-  ];
-
   return (
     <section id="sobre-nosotros" ref={sectionRef} className="py-24 bg-white">
       <div className="max-w-6xl mx-auto px-6">
@@ -75,20 +66,8 @@ export default function About() {
               </p>
             </div>
 
-            {/* Expertise badges */}
-            <div className="reveal stagger-2 flex flex-wrap gap-2">
-              {badges.map((badge) => (
-                <span
-                  key={badge}
-                  className="bg-pink-bg text-rose-dark text-sm font-medium px-3 py-1.5 rounded-full border border-rose-light"
-                >
-                  {badge}
-                </span>
-              ))}
-            </div>
-
             {/* Founded */}
-            <div className="reveal stagger-3 flex items-center gap-4 pt-2">
+            <div className="reveal stagger-2 flex items-center gap-4 pt-2">
               <div className="w-12 h-12 rounded-2xl bg-rose flex items-center justify-center flex-shrink-0">
                 <MapPinIcon className="w-6 h-6 text-white" />
               </div>

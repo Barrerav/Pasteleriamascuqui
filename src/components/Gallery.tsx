@@ -65,7 +65,7 @@ export default function Gallery() {
                   key={post.src}
                   onClick={() => openLightbox(i)}
                   className={`reveal stagger-${(i % 6) + 1} relative overflow-hidden rounded-2xl group block ${
-                    large ? 'col-span-2 row-span-2' : ''
+                    large ? 'sm:col-span-2 sm:row-span-2' : ''
                   } cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-rose`}
                   style={{ aspectRatio: '1 / 1' }}
                   aria-label={`Ver foto: ${post.alt}`}

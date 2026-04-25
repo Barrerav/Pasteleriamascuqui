@@ -12,8 +12,6 @@ export const profile = {
   founded: '2022',
   yearsActive: 4,
   chef: 'Liser Giménez',
-  profileImage: '/instagram/profile.jpg',
-  ogImage: '/instagram/post-1.jpg',
   stats: {
     posts: 166,
     followers: '3.082',
@@ -29,20 +27,6 @@ export const profile = {
     { days: 'Lunes a Viernes', hours: '8:30 – 20:30' },
     { days: 'Sábados', hours: '9:00 – 14:00' },
     { days: 'Domingos', hours: 'Cerrado' },
-  ],
-  posts: [
-    { src: '/instagram/post-1.jpg', alt: 'Iced lattes de verano' },
-    { src: '/instagram/post-2.jpg', alt: 'Desayuno artesanal' },
-    { src: '/instagram/post-3.jpg', alt: '4to Aniversario' },
-    { src: '/instagram/post-4.jpg', alt: 'Arte latte' },
-    { src: '/instagram/post-5.jpg', alt: 'Mocaccino vegetal' },
-    { src: '/instagram/post-6.jpg', alt: 'Cachitos venezolanos' },
-    { src: '/instagram/post-7.jpg', alt: 'Cappuccino rosa San Valentín' },
-    { src: '/instagram/post-8.jpg', alt: 'Obras en el local' },
-    { src: '/instagram/post-9.jpg', alt: 'Roscones de Reyes artesanales' },
-    { src: '/instagram/post-10.jpg', alt: 'Café con nosotros' },
-    { src: '/instagram/post-11.jpg', alt: 'Descubre Más Cuqui' },
-    { src: '/instagram/post-12.jpg', alt: 'Buen comienzo de mes' },
   ],
   services: [
     {

@@ -35,7 +35,7 @@ function MetricCard({ value, label, suffix, active }: { value: number; label: st
         {display}
         <span className="text-gold">{suffix}</span>
       </div>
-      <p className="text-white/80 text-sm mt-2 max-w-[120px] leading-snug">{label}</p>
+      <p className="text-white/80 text-sm mt-2 leading-snug">{label}</p>
     </div>
   );
 }
@@ -90,7 +90,7 @@ export default function Metrics() {
             Cuatro años endulzando Ciudad Real
           </h2>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-4 divide-x divide-white/10">
+        <div className="grid grid-cols-2 md:grid-cols-4 md:divide-x divide-white/10">
           {profile.metrics.map((m) => (
             <MetricCard key={m.label} value={m.value} label={m.label} suffix={m.suffix} active={active} />
           ))}

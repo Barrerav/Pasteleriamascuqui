@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from 'react';
 import Image from 'next/image';
 import { profile } from '@/data/profile';
+import { logoSrc } from '@/data/photos';
 
 const links = [
   { href: '#sobre-nosotros', label: 'Nosotros' },
@@ -74,7 +75,7 @@ export default function Navbar() {
         <div className="max-w-6xl mx-auto px-6 h-28 md:h-40 flex items-center justify-between">
           <a href="#" className="flex items-center">
             <Image 
-              src="/images/logo.png" 
+              src={logoSrc}
               alt="Más Cuqui — Cafetería y Pastelería en Ciudad Real" 
               width={500} 
               height={200} 

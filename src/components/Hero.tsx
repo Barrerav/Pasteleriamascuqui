@@ -52,7 +52,7 @@ export default function Hero() {
         </div>
 
         {/* Content */}
-        <div className="relative z-10 max-w-3xl mx-auto px-6 py-24 flex flex-col items-center gap-8 text-center mt-10">
+        <div className="relative z-10 max-w-3xl mx-auto px-6 py-14 sm:py-24 flex flex-col items-center gap-6 sm:gap-8 text-center mt-6 sm:mt-10">
 
           {/* Eyebrow */}
           <div className="flex items-center gap-3">
