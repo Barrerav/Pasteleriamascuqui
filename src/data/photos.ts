@@ -47,7 +47,7 @@ export const historyPhotos = [
 // Las claves corresponden al campo "icon" en profile.ts > services
 export const servicePhotoMap: Record<string, string> = {
   coffee:    '/instagram/post-4.jpg',   // Tarjeta: Cafetería
-  cake:      '/instagram/post-9.jpg',   // Tarjeta: Pastelería artesanal
+  cake:      '/instagram/post-12.jpg',  // Tarjeta: Pastelería artesanal
   croissant: '/instagram/post-6.jpg',   // Tarjeta: Desayunos
   gift:      '/instagram/post-3.jpg',   // Tarjeta: Pedidos personalizados
 };
