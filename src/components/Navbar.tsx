@@ -71,14 +71,14 @@ export default function Navbar() {
           scrolled ? 'bg-cream/90 backdrop-blur-md shadow-sm' : 'bg-transparent'
         }`}
       >
-        <div className="max-w-6xl mx-auto px-6 h-20 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-6 h-24 md:h-28 flex items-center justify-between">
           <a href="#" className="flex items-center">
             <Image 
               src="/images/logo.png" 
               alt="Más Cuqui — Cafetería y Pastelería en Ciudad Real" 
-              width={200} 
-              height={72} 
-              className="h-14 md:h-16 w-auto object-contain drop-shadow-sm"
+              width={300} 
+              height={120} 
+              className="h-20 md:h-24 w-auto object-contain drop-shadow-sm"
               priority
             />
           </a>
