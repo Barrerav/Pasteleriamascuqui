@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fase 2 — SEO & Compartir · +Cuqui</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --cream: #fdf6f0; --cream-mid: #f5ede4; --cream-dark: #e8ddd4;
+  --rose: #c8706a; --rose-dark: #a85a55;
+  --caramel: #f5a845; --pink: #ef83a7;
+  --ink: #2d1f1a; --ink-soft: #7a5c55;
+  --green: oklch(58% 0.13 155); --green-light: oklch(93% 0.04 155);
+  --blue: oklch(58% 0.13 250); --blue-light: oklch(94% 0.04 250);
+}
+body { font-family: 'DM Sans', sans-serif; background: #ede6df; color: var(--ink); }
+
+/* TABS */
+.tabs { display:flex; gap:2px; background:#e0d9d0; padding:14px 28px 0; position:sticky; top:0; z-index:200; align-items:flex-end; }
+.tab { padding:9px 20px; border-radius:8px 8px 0 0; font-size:13px; font-weight:500; cursor:pointer; color:#7a6a62; background:#d4cdc5; transition:all 0.2s; user-select:none; }
+.tab.active { background:var(--cream); color:var(--ink); font-weight:600; padding-bottom:11px; }
+.tab-content { display:none; }
+.tab-content.active { display:block; }
+
+/* LAYOUT */
+.page-inner { max-width:1060px; margin:0 auto; padding:56px 40px 100px; }
+.section-eyebrow { font-size:10px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; color:var(--rose); margin-bottom:8px; }
+h2 { font-family:'Playfair Display',serif; font-size:32px; font-weight:400; margin-bottom:10px; }
+h2 em { font-style:italic; color:var(--rose); }
+.page-sub { font-size:15px; color:var(--ink-soft); margin-bottom:52px; max-width:580px; }
+
+/* TASK CARDS */
+.tasks { display:flex; flex-direction:column; gap:28px; }
+.task-card { background:white; border-radius:20px; overflow:hidden; border:1.5px solid var(--cream-dark); display:grid; grid-template-columns:5px 1fr; }
+.tc-accent      { background:var(--rose); }
+.tc-accent.b    { background:var(--blue); }
+.tc-accent.g    { background:var(--green); }
+.tc-body { padding:28px 32px; }
+.tc-header { display:flex; align-items:center; gap:12px; margin-bottom:14px; }
+.badge { font-size:10px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; padding:3px 10px; border-radius:100px; }
+.badge.r { background:oklch(93% 0.04 15); color:var(--rose); }
+.badge.b { background:var(--blue-light); color:var(--blue); }
+.badge.g { background:var(--green-light); color:var(--green); }
+.badge.t { font-size:11px; background:var(--cream-mid); color:var(--ink-soft); }
+.tc-title { font-size:17px; font-weight:600; }
+.tc-desc { font-size:14px; color:var(--ink-soft); line-height:1.75; margin-bottom:20px; }
+.tc-desc strong { color:var(--ink); }
+.effort-chip { display:inline-flex; align-items:center; gap:6px; background:var(--cream-mid); border-radius:100px; padding:4px 12px; font-size:12px; color:var(--ink-soft); margin-bottom:20px; }
+.effort-chip svg { color:var(--rose); }
+
+/* WA PREVIEW */
+.wa-demo { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-top:8px; }
+.wa-panel { border-radius:14px; overflow:hidden; }
+.wa-label { font-size:10px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; padding:10px 14px; }
+.wa-before { background:oklch(96% 0.008 20); }
+.wa-before .wa-label { color:oklch(52% 0.1 25); }
+.wa-after  { background:oklch(96% 0.018 140); }
+.wa-after .wa-label  { color:oklch(40% 0.1 155); }
+.wa-mock { margin:0 14px 14px; border-radius:10px; overflow:hidden; box-shadow:0 2px 12px rgba(0,0,0,0.1); }
+
+/* WhatsApp bubble look */
+.wa-phone-wrap { background:#e5ddd5; padding:16px; border-radius:12px; }
+.wa-bubble { background:white; border-radius:0 8px 8px 8px; padding:6px; max-width:240px; box-shadow:0 1px 4px rgba(0,0,0,0.12); }
+.wa-link-preview { border-radius:4px; overflow:hidden; }
+.wa-link-no-preview { background:#f0f0f0; border-radius:4px; padding:12px; display:flex; align-items:center; gap:10px; }
+.wa-link-no-preview svg { flex-shrink:0; color:#888; }
+.wa-link-no-preview span { font-size:12px; color:#888; word-break:break-all; }
+.wa-link-img { width:100%; height:110px; background:linear-gradient(135deg, #f5c0b0, #c87060); display:flex; align-items:center; justify-content:center; font-size:28px; }
+.wa-link-meta { padding:8px 10px; background:#f9f9f9; }
+.wa-link-meta-site { font-size:10px; color:#888; text-transform:uppercase; letter-spacing:0.05em; }
+.wa-link-meta-title { font-size:13px; font-weight:600; color:#111; margin:2px 0; }
+.wa-link-meta-desc  { font-size:11px; color:#666; line-height:1.4; }
+.wa-msg-text { font-size:13px; padding:6px 8px 4px; color:#111; }
+.wa-msg-time { font-size:10px; color:#999; text-align:right; padding:0 8px 6px; }
+
+/* CODE BLOCKS */
+.code-wrap { background:oklch(16% 0.01 260); border-radius:12px; margin-top:16px; overflow:hidden; }
+.code-file { background:oklch(20% 0.01 260); padding:9px 18px; font-family:'Courier New',monospace; font-size:11px; color:rgba(255,255,255,0.45); border-bottom:1px solid rgba(255,255,255,0.05); display:flex; align-items:center; gap:8px; }
+.code-file span { color:rgba(255,255,255,0.7); }
+.code-scroll { padding:20px 22px; overflow-x:auto; }
+pre { font-family:'Courier New',monospace; font-size:13px; line-height:1.9; color:oklch(82% 0.01 60); }
+.ck { color:oklch(68% 0.18 280); }
+.cs { color:oklch(72% 0.15 140); }
+.cc { color:oklch(50% 0.01 60); font-style:italic; }
+.cp { color:oklch(70% 0.15 50); }
+.ct { color:oklch(65% 0.14 200); }
+.chl { background:oklch(22% 0.04 60/0.5); display:block; margin:0 -22px; padding:0 22px; border-left:2px solid oklch(68% 0.14 55); }
+
+/* SCHEMA DIAGRAM */
+.schema-diagram { background:var(--cream-mid); border-radius:14px; padding:24px; margin-top:16px; }
+.schema-tree { font-family:'Courier New',monospace; font-size:13px; line-height:2; color:var(--ink); }
+.s-type  { color:var(--rose); font-weight:700; }
+.s-key   { color:oklch(48% 0.12 55); }
+.s-val   { color:oklch(40% 0.12 155); }
+.s-note  { color:var(--ink-soft); font-style:italic; }
+.indent  { margin-left:20px; }
+
+/* GOOGLE SNIPPET PREVIEW */
+.google-preview { background:white; border-radius:12px; padding:20px 24px; margin-top:16px; border:1.5px solid var(--cream-dark); }
+.gp-url  { font-size:12px; color:#0d652d; margin-bottom:2px; }
+.gp-title{ font-size:18px; color:#1a0dab; font-weight:400; margin-bottom:4px; cursor:default; }
+.gp-title:hover { text-decoration:underline; }
+.gp-desc { font-size:14px; color:#545454; line-height:1.55; }
+.gp-rich { display:flex; gap:20px; margin-top:14px; padding-top:14px; border-top:1px solid var(--cream-dark); flex-wrap:wrap; }
+.gp-rich-item { font-size:12px; color:var(--ink-soft); display:flex; align-items:center; gap:6px; }
+.gp-rich-item strong { color:var(--ink); }
+.star-gold { color:#f5a845; }
+
+/* CODE TAB */
+#panel-code { background:oklch(14% 0.01 260); }
+.code-header { background:oklch(18% 0.01 260); padding:18px 32px; border-bottom:1px solid rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:space-between; }
+.file-tabs { display:flex; gap:2px; flex-wrap:wrap; }
+.ftab { font-family:'Courier New',monospace; font-size:12px; padding:7px 14px; border-radius:5px 5px 0 0; cursor:pointer; color:rgba(255,255,255,0.4); transition:all 0.2s; user-select:none; }
+.ftab.active { background:oklch(14% 0.01 260); color:rgba(255,255,255,0.88); }
+.code-body { padding:30px 40px; overflow-x:auto; }
+.note { background:oklch(20% 0.03 50/0.7); border:1px solid oklch(65% 0.13 55/0.3); border-radius:8px; padding:13px 17px; margin:0 0 20px; font-size:12px; color:oklch(78% 0.08 55); display:flex; align-items:flex-start; gap:10px; }
+.sub-panel { display:none; }
+.sub-panel.active { display:block; }
+
+code { font-family:'Courier New',monospace; font-size:12px; background:var(--cream-dark); padding:2px 6px; border-radius:4px; }
+
+/* CHECKLIST */
+.checklist { display:flex; flex-direction:column; gap:0; margin-top:16px; }
+.check-item { display:flex; align-items:flex-start; gap:12px; padding:12px 0; border-bottom:1px dashed var(--cream-dark); font-size:14px; }
+.check-item:last-child { border-bottom:none; }
+.check-box { width:20px; height:20px; border-radius:6px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:1px; font-size:11px; }
+.cb-done { background:var(--green-light); color:var(--green); }
+.cb-todo { background:var(--cream-dark); color:transparent; border:1.5px solid var(--cream-dark); }
+</style>
+</head>
+<body>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('overview')">📋 Fase 2 Overview</div>
+  <div class="tab" onclick="switchTab('og')">📱 og:image</div>
+  <div class="tab" onclick="switchTab('schema')">🔍 Schema.org</div>
+  <div class="tab" onclick="switchTab('code')">💻 Código completo</div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- OVERVIEW -->
+<!-- ══════════════════════════════════════════════ -->
+<div id="panel-overview" class="tab-content active">
+  <div class="page-inner">
+    <div class="section-eyebrow">Fase 2 · SEO & compartir</div>
+    <h2>Solidez técnica e <em>impacto</em> en búsquedas</h2>
+    <p class="page-sub">Estas mejoras no las ve el visitante directamente, pero traen más clientes: mejor posición en Google, previews bonitas al compartir en WhatsApp y más visibilidad local.</p>
+
+    <div class="tasks">
+
+      <!-- TAREA 1: og:image -->
+      <div class="task-card">
+        <div class="tc-accent"></div>
+        <div class="tc-body">
+          <div class="tc-header">
+            <span class="badge r">og:image</span>
+            <span class="tc-title">Preview al compartir en WhatsApp e Instagram</span>
+            <span class="badge t" style="margin-left:auto;">~20 min</span>
+          </div>
+          <p class="tc-desc">Cuando alguien comparte el link de +Cuqui en WhatsApp, aparece una tarjeta con imagen, título y descripción. Sin el <strong>og:image</strong> configurado, aparece un link plano y poco atractivo — o peor, sin preview.</p>
+
+          <div class="wa-demo">
+            <div class="wa-panel wa-before">
+              <div class="wa-label">🔴 Sin og:image (ahora)</div>
+              <div class="wa-mock">
+                <div class="wa-phone-wrap">
+                  <div class="wa-bubble">
+                    <div class="wa-link-no-preview">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 007.54.54l3-3a5 5 0 00-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 00-7.54-.54l-3 3a5 5 0 007.07 7.07l1.71-1.71"/></svg>
+                      <span>pasteleriamascuqui.vercel.app</span>
+                    </div>
+                    <div class="wa-msg-text">¡Mira esta pastelería!</div>
+                    <div class="wa-msg-time">12:34 ✓✓</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="wa-panel wa-after">
+              <div class="wa-label">🟢 Con og:image (propuesta)</div>
+              <div class="wa-mock">
+                <div class="wa-phone-wrap">
+                  <div class="wa-bubble">
+                    <div class="wa-link-preview">
+                      <div class="wa-link-img">🎂</div>
+                      <div class="wa-link-meta">
+                        <div class="wa-link-meta-site">pasteleriamascuqui.vercel.app</div>
+                        <div class="wa-link-meta-title">Más Cuqui — Pastelería Artesanal</div>
+                        <div class="wa-link-meta-desc">Tartas personalizadas, desayunos y café en Ciudad Real. Obrador artesanal propio.</div>
+                      </div>
+                    </div>
+                    <div class="wa-msg-text">¡Mira esta pastelería!</div>
+                    <div class="wa-msg-time">12:34 ✓✓</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAREA 2: Schema.org -->
+      <div class="task-card">
+        <div class="tc-accent b"></div>
+        <div class="tc-body">
+          <div class="tc-header">
+            <span class="badge b">Schema.org</span>
+            <span class="tc-title">Datos estructurados para Google Maps y búsquedas</span>
+            <span class="badge t" style="margin-left:auto;">~30 min</span>
+          </div>
+          <p class="tc-desc">Con un bloque JSON-LD en el <code>&lt;head&gt;</code>, Google entiende que la web es una <strong>Bakery</strong> (panadería/pastelería) con horario, dirección y valoraciones. Esto puede hacer que aparezca el panel de información a la derecha en Google, o en búsquedas como "pastelería ciudad real".</p>
+
+          <!-- Google rich snippet preview -->
+          <div class="google-preview">
+            <div class="gp-url">pasteleriamascuqui.vercel.app</div>
+            <div class="gp-title">Más Cuqui — Pastelería &amp; Cafetería Artesanal en Ciudad Real</div>
+            <div class="gp-desc">Pastelería artesanal en el corazón de Ciudad Real. Tartas personalizadas, desayunos, café de especialidad y dulces venezolanos elaborados cada día con obrador propio.</div>
+            <div class="gp-rich">
+              <div class="gp-rich-item">
+                <span class="star-gold">★★★★★</span>
+                <strong>4.8</strong> · 164 reseñas
+              </div>
+              <div class="gp-rich-item">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Abierto · Cierra 20:30
+              </div>
+              <div class="gp-rich-item">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Calle Tinte, 17 Bajo, Ciudad Real
+              </div>
+            </div>
+          </div>
+          <p style="font-size:12px; color:var(--ink-soft); margin-top:10px;">↑ Simulación de cómo puede aparecer en resultados de búsqueda con Rich Snippets activados.</p>
+        </div>
+      </div>
+
+      <!-- TAREA 3: photos.ts ya hecho -->
+      <div class="task-card">
+        <div class="tc-accent g"></div>
+        <div class="tc-body">
+          <div class="tc-header">
+            <span class="badge g">✓ Listo</span>
+            <span class="tc-title">Centralizar fotos en photos.ts</span>
+          </div>
+          <p class="tc-desc">Ya está implementado en la Fase 1. El archivo <code>src/data/photos.ts</code> centraliza hero, producto, historia y galería. Marca esta tarea como completada.</p>
+
+          <div class="checklist">
+            <div class="check-item"><div class="check-box cb-done">✓</div> heroConfig (vídeo + poster)</div>
+            <div class="check-item"><div class="check-box cb-done">✓</div> productPhotos (4 categorías)</div>
+            <div class="check-item"><div class="check-box cb-done">✓</div> historyPhotos (fix Nintendo Switch)</div>
+            <div class="check-item"><div class="check-box cb-done">✓</div> galleryPhotos (array con categorías)</div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- OG:IMAGE -->
+<!-- ══════════════════════════════════════════════ -->
+<div id="panel-og" class="tab-content">
+  <div class="page-inner">
+    <div class="section-eyebrow">og:image · Open Graph</div>
+    <h2>Preview al <em>compartir</em></h2>
+    <p class="page-sub">En Next.js 14+ con App Router, las metadata de og:image se definen en <code>layout.tsx</code> o en cada <code>page.tsx</code>. Te muestro ambas opciones.</p>
+
+    <div class="tasks">
+      <div class="task-card">
+        <div class="tc-accent"></div>
+        <div class="tc-body">
+          <h4 style="font-size:15px; font-weight:600; margin-bottom:12px;">Opción A — metadata estática en layout.tsx <span class="badge t" style="margin-left:8px; vertical-align:middle;">recomendada</span></h4>
+          <p class="tc-desc">La más sencilla. Define los metadatos una vez y se aplican a toda la web.</p>
+
+          <div class="code-wrap">
+            <div class="code-file">📁 <span>src/app/layout.tsx</span></div>
+            <div class="code-scroll">
+<pre><span class="ck">import</span> { <span class="cp">Metadata</span> } <span class="ck">from</span> <span class="cs">'next'</span>
+
+<span class="ck">export const</span> <span class="cp">metadata</span>: <span class="cp">Metadata</span> = {
+  <span class="cp">title</span>:       <span class="cs">'Más Cuqui — Pastelería &amp; Cafetería Artesanal'</span>,
+  <span class="cp">description</span>: <span class="cs">'Pastelería artesanal en Ciudad Real. Tartas personalizadas, desayunos y café de especialidad. Obrador propio, elaborado cada día con amor.'</span>,
+
+  <span class="cc">// ── Open Graph (WhatsApp, Facebook, LinkedIn) ──</span>
+  <span class="cp">openGraph</span>: {
+    <span class="cp">title</span>:       <span class="cs">'Más Cuqui — Pastelería Artesanal · Ciudad Real'</span>,
+    <span class="cp">description</span>: <span class="cs">'Tartas personalizadas, desayunos y café de especialidad. Obrador propio.'</span>,
+    <span class="cp">url</span>:         <span class="cs">'https://pasteleriamascuqui.vercel.app'</span>,
+    <span class="cp">siteName</span>:    <span class="cs">'Más Cuqui'</span>,
+    <span class="cp">locale</span>:      <span class="cs">'es_ES'</span>,
+    <span class="cp">type</span>:        <span class="cs">'website'</span>,
+<span class="chl">    <span class="cp">images</span>: [{</span>
+<span class="chl">      <span class="cp">url</span>:    <span class="cs">'/images/og-image.jpg'</span>,  <span class="cc">// ← foto apetecible, 1200×630px</span></span>
+<span class="chl">      <span class="cp">width</span>:  <span class="cs">1200</span>,</span>
+<span class="chl">      <span class="cp">height</span>: <span class="cs">630</span>,</span>
+<span class="chl">      <span class="cp">alt</span>:    <span class="cs">'Tartas artesanales de Más Cuqui en Ciudad Real'</span>,</span>
+<span class="chl">    }],</span>
+  },
+
+  <span class="cc">// ── Twitter / X ──</span>
+  <span class="cp">twitter</span>: {
+    <span class="cp">card</span>:        <span class="cs">'summary_large_image'</span>,
+    <span class="cp">title</span>:       <span class="cs">'Más Cuqui — Pastelería Artesanal'</span>,
+    <span class="cp">description</span>: <span class="cs">'Tartas, desayunos y café en Ciudad Real.'</span>,
+<span class="chl">    <span class="cp">images</span>:      [<span class="cs">'/images/og-image.jpg'</span>],</span>
+  },
+}</pre>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="task-card">
+        <div class="tc-accent"></div>
+        <div class="tc-body">
+          <h4 style="font-size:15px; font-weight:600; margin-bottom:12px;">¿Qué foto usar como og:image?</h4>
+          <p class="tc-desc">La imagen debe ser <strong>1200×630px</strong> (ratio 1.91:1). Aparecerá como miniatura en WhatsApp, así que tiene que ser la foto más apetecible que tenga la clienta. Recomendaciones:</p>
+
+          <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin-top:4px;">
+            <div style="background:white; border-radius:12px; overflow:hidden; border:1.5px solid var(--cream-dark);">
+              <div style="height:80px; background:linear-gradient(135deg,#fde8b0,#f5c060,#e8a030); display:flex; align-items:center; justify-content:center; font-size:28px;">🎂</div>
+              <div style="padding:10px 12px;">
+                <div style="font-size:12px; font-weight:600; margin-bottom:3px;">Tarta de cumpleaños</div>
+                <div style="font-size:11px; color:var(--ink-soft);">Alta conversión — producto estrella, colores vivos</div>
+              </div>
+            </div>
+            <div style="background:white; border-radius:12px; overflow:hidden; border:1.5px solid var(--cream-dark);">
+              <div style="height:80px; background:linear-gradient(135deg,#f5d5c0,#e8a090,#c87870); display:flex; align-items:center; justify-content:center; font-size:28px;">☕</div>
+              <div style="padding:10px 12px;">
+                <div style="font-size:12px; font-weight:600; margin-bottom:3px;">Arte latte</div>
+                <div style="font-size:11px; color:var(--ink-soft);">Muy compartible, transmite calidad artesanal</div>
+              </div>
+            </div>
+            <div style="background:white; border-radius:12px; overflow:hidden; border:1.5px solid var(--cream-dark);">
+              <div style="height:80px; background:linear-gradient(135deg,#fde0e8,#f0a0b8,#d87090); display:flex; align-items:center; justify-content:center; font-size:28px;">🥐</div>
+              <div style="padding:10px 12px;">
+                <div style="font-size:12px; font-weight:600; margin-bottom:3px;">Bollería / cachitos</div>
+                <div style="font-size:11px; color:var(--ink-soft);">Diferenciador venezolano, genera curiosidad</div>
+              </div>
+            </div>
+          </div>
+
+          <div style="background:#fdf0ec; border-radius:10px; padding:14px 18px; margin-top:16px; border-left:3px solid var(--rose);">
+            <p style="font-size:13px; color:var(--ink); font-weight:600; margin-bottom:4px;">📐 Cómo preparar la imagen</p>
+            <p style="font-size:13px; color:var(--ink-soft); line-height:1.7;">Recorta la foto a 1200×630px (puedes hacerlo en Canva, gratis). Guárdala como <code>public/images/og-image.jpg</code> con calidad media (70%). No hace falta que sea ultra-pesada.</p>
+          </div>
+
+          <div style="margin-top:16px; background:#f0f8f4; border-radius:10px; padding:14px 18px; border-left:3px solid var(--green);">
+            <p style="font-size:13px; color:var(--ink); font-weight:600; margin-bottom:4px;">🧪 Cómo verificar que funciona</p>
+            <p style="font-size:13px; color:var(--ink-soft); line-height:1.7;">Después del deploy, ve a <a href="https://developers.facebook.com/tools/debug/" target="_blank" style="color:var(--rose);">developers.facebook.com/tools/debug</a> y pega la URL. Te mostrará exactamente la preview que verán en WhatsApp y Facebook.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- SCHEMA.ORG -->
+<!-- ══════════════════════════════════════════════ -->
+<div id="panel-schema" class="tab-content">
+  <div class="page-inner">
+    <div class="section-eyebrow">Schema.org · JSON-LD</div>
+    <h2>Datos estructurados para <em>Google</em></h2>
+    <p class="page-sub">Este bloque de JSON va invisible en el <code>&lt;head&gt;</code> de la web. Google lo lee para entender qué es el negocio y mostrar información enriquecida en los resultados.</p>
+
+    <div class="tasks">
+      <div class="task-card">
+        <div class="tc-accent b"></div>
+        <div class="tc-body">
+          <h4 style="font-size:15px; font-weight:600; margin-bottom:16px;">¿Qué información incluye?</h4>
+          <div class="schema-diagram">
+            <div class="schema-tree">
+              <span class="s-type">Bakery</span> {<br>
+              <div class="indent">
+                <span class="s-key">name</span>: <span class="s-val">"Más Cuqui"</span> <span class="s-note">← nombre del negocio</span><br>
+                <span class="s-key">address</span>: <span class="s-val">"Calle Tinte, 17 Bajo, Ciudad Real"</span><br>
+                <span class="s-key">telephone</span>: <span class="s-val">"+34641384941"</span><br>
+                <span class="s-key">openingHours</span>: <span class="s-val">["Mo-Fr 08:30-20:30", "Sa 09:00-14:00"]</span><br>
+                <span class="s-key">servesCuisine</span>: <span class="s-val">["Pastelería artesanal", "Venezolana", "Española"]</span><br>
+                <span class="s-key">priceRange</span>: <span class="s-val">"€"</span><br>
+                <span class="s-key">aggregateRating</span>: {<br>
+                <div class="indent">
+                  <span class="s-key">ratingValue</span>: <span class="s-val">"4.8"</span><br>
+                  <span class="s-key">reviewCount</span>: <span class="s-val">"164"</span> <span class="s-note">← actualiza cuando cambie</span>
+                </div>
+                }<br>
+                <span class="s-key">sameAs</span>: [instagram, facebook, tiktok] <span class="s-note">← tus redes</span>
+              </div>
+              }
+            </div>
+          </div>
+
+          <div class="code-wrap" style="margin-top:16px;">
+            <div class="code-file">📁 <span>src/app/layout.tsx</span> — añade dentro del &lt;head&gt;</div>
+            <div class="code-scroll">
+<pre><span class="cc">// Añade este componente dentro del return de RootLayout</span>
+<span class="cc">// justo antes del cierre de &lt;/head&gt;</span>
+
+<span class="ct">&lt;script</span>
+  <span class="cp">type</span>=<span class="cs">"application/ld+json"</span>
+  <span class="cp">dangerouslySetInnerHTML</span>=<span class="cs">{{</span>
+    __html: <span class="cp">JSON.stringify</span>({
+      <span class="cs">"@context"</span>: <span class="cs">"https://schema.org"</span>,
+      <span class="cs">"@type"</span>:    <span class="cs">"Bakery"</span>,
+<span class="chl">      <span class="cs">"name"</span>:    <span class="cs">"Más Cuqui"</span>,</span>
+      <span class="cs">"description"</span>: <span class="cs">"Pastelería artesanal en Ciudad Real con obrador propio. Tartas personalizadas, dulces venezolanos y café de especialidad."</span>,
+      <span class="cs">"url"</span>:     <span class="cs">"https://pasteleriamascuqui.vercel.app"</span>,
+      <span class="cs">"logo"</span>:    <span class="cs">"https://pasteleriamascuqui.vercel.app/images/logo.png"</span>,
+      <span class="cs">"image"</span>:   <span class="cs">"https://pasteleriamascuqui.vercel.app/images/og-image.jpg"</span>,
+      <span class="cs">"telephone"</span>: <span class="cs">"+34641384941"</span>,
+<span class="chl">      <span class="cs">"address"</span>: {</span>
+<span class="chl">        <span class="cs">"@type"</span>:          <span class="cs">"PostalAddress"</span>,</span>
+<span class="chl">        <span class="cs">"streetAddress"</span>:  <span class="cs">"Calle Tinte, 17 Bajo"</span>,</span>
+<span class="chl">        <span class="cs">"addressLocality"</span>: <span class="cs">"Ciudad Real"</span>,</span>
+<span class="chl">        <span class="cs">"postalCode"</span>:     <span class="cs">"13001"</span>,</span>
+<span class="chl">        <span class="cs">"addressCountry"</span>: <span class="cs">"ES"</span>,</span>
+<span class="chl">      },</span>
+      <span class="cs">"geo"</span>: {
+        <span class="cs">"@type"</span>:     <span class="cs">"GeoCoordinates"</span>,
+        <span class="cs">"latitude"</span>:  <span class="cs">"38.9824787"</span>,
+        <span class="cs">"longitude"</span>: <span class="cs">"-3.9312829"</span>,
+      },
+<span class="chl">      <span class="cs">"openingHours"</span>: [</span>
+<span class="chl">        <span class="cs">"Mo Tu We Th Fr 08:30-20:30"</span>,</span>
+<span class="chl">        <span class="cs">"Sa 09:00-14:00"</span>,</span>
+<span class="chl">      ],</span>
+      <span class="cs">"priceRange"</span>:     <span class="cs">"€"</span>,
+      <span class="cs">"servesCuisine"</span>:  [<span class="cs">"Pastelería artesanal"</span>, <span class="cs">"Venezolana"</span>, <span class="cs">"Cafetería"</span>],
+      <span class="cs">"currenciesAccepted"</span>: <span class="cs">"EUR"</span>,
+      <span class="cs">"paymentAccepted"</span>: <span class="cs">"Cash, Credit Card"</span>,
+<span class="chl">      <span class="cs">"aggregateRating"</span>: {</span>
+<span class="chl">        <span class="cs">"@type"</span>:       <span class="cs">"AggregateRating"</span>,</span>
+<span class="chl">        <span class="cs">"ratingValue"</span>: <span class="cs">"4.8"</span>,     <span class="cc">// ← actualiza periódicamente</span></span>
+<span class="chl">        <span class="cs">"reviewCount"</span>: <span class="cs">"164"</span>,     <span class="cc">// ← actualiza periódicamente</span></span>
+<span class="chl">        <span class="cs">"bestRating"</span>:  <span class="cs">"5"</span>,</span>
+<span class="chl">      },</span>
+      <span class="cs">"sameAs"</span>: [
+        <span class="cs">"https://www.instagram.com/pasteleriamascuqui/"</span>,
+        <span class="cs">"https://www.facebook.com/101758689422174/"</span>,
+        <span class="cs">"https://www.tiktok.com/@cuquipasteleria"</span>,
+      ],
+    })
+  <span class="cs">}}</span>
+<span class="ct">/&gt;</span></pre>
+            </div>
+          </div>
+
+          <div style="background:#f0f8f4; border-radius:10px; padding:14px 18px; margin-top:16px; border-left:3px solid var(--green);">
+            <p style="font-size:13px; color:var(--ink); font-weight:600; margin-bottom:4px;">🧪 Verificar que Google lo lee bien</p>
+            <p style="font-size:13px; color:var(--ink-soft); line-height:1.7;">Después del deploy, ve a <a href="https://search.google.com/test/rich-results" target="_blank" style="color:var(--rose);">search.google.com/test/rich-results</a> y pega la URL. Te dirá si el schema está correcto y qué rich snippets puede mostrar Google.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════ -->
+<!-- CÓDIGO COMPLETO -->
+<!-- ══════════════════════════════════════════════ -->
+<div id="panel-code" class="tab-content">
+  <div class="code-header">
+    <div class="file-tabs">
+      <div class="ftab active" onclick="switchFile('layout')">layout.tsx (completo)</div>
+      <div class="ftab" onclick="switchFile('seo')">seo.ts (helper)</div>
+    </div>
+    <div style="font-size:11px; color:rgba(255,255,255,0.28);">Código listo para copiar</div>
+  </div>
+  <div class="code-body">
+
+    <div id="code-layout" class="sub-panel active">
+      <div class="note"><div style="font-size:14px;">📁</div>src/app/layout.tsx — versión completa con og:image + schema + fuentes</div>
+<pre><span class="ck">import</span> { <span class="cp">Metadata</span> } <span class="ck">from</span> <span class="cs">'next'</span>
+<span class="ck">import</span> { <span class="cp">Playfair_Display</span>, <span class="cp">DM_Sans</span> } <span class="ck">from</span> <span class="cs">'next/font/google'</span>
+<span class="ck">import</span> <span class="cs">'./globals.css'</span>
+
+<span class="ck">const</span> <span class="cp">playfair</span> = <span class="cp">Playfair_Display</span>({
+  subsets: [<span class="cs">'latin'</span>],
+  variable: <span class="cs">'--font-playfair'</span>,
+})
+
+<span class="ck">const</span> <span class="cp">dmSans</span> = <span class="cp">DM_Sans</span>({
+  subsets: [<span class="cs">'latin'</span>],
+  variable: <span class="cs">'--font-dm-sans'</span>,
+})
+
+<span class="cc">// ── Metadata (og:image, Twitter, etc.) ──────────────</span>
+<span class="ck">export const</span> <span class="cp">metadata</span>: <span class="cp">Metadata</span> = {
+  <span class="cp">title</span>: {
+    <span class="cp">default</span>:  <span class="cs">'Más Cuqui — Pastelería &amp; Cafetería Artesanal'</span>,
+    <span class="cp">template</span>: <span class="cs">'%s · Más Cuqui'</span>,
+  },
+  <span class="cp">description</span>: <span class="cs">'Pastelería artesanal en Ciudad Real. Tartas personalizadas, desayunos, café de especialidad y dulces venezolanos.'</span>,
+  <span class="cp">keywords</span>: [<span class="cs">'pastelería Ciudad Real'</span>, <span class="cs">'tartas personalizadas'</span>, <span class="cs">'cafetería artesanal'</span>, <span class="cs">'dulces venezolanos'</span>],
+  <span class="cp">authors</span>: [{ <span class="cp">name</span>: <span class="cs">'Más Cuqui'</span> }],
+  <span class="cp">openGraph</span>: {
+    <span class="cp">title</span>:       <span class="cs">'Más Cuqui — Pastelería Artesanal · Ciudad Real'</span>,
+    <span class="cp">description</span>: <span class="cs">'Tartas personalizadas, desayunos y café de especialidad.'</span>,
+    <span class="cp">url</span>:         <span class="cs">'https://pasteleriamascuqui.vercel.app'</span>,
+    <span class="cp">siteName</span>:    <span class="cs">'Más Cuqui'</span>,
+    <span class="cp">locale</span>:      <span class="cs">'es_ES'</span>,
+    <span class="cp">type</span>:        <span class="cs">'website'</span>,
+    <span class="cp">images</span>: [{
+      <span class="cp">url</span>:    <span class="cs">'/images/og-image.jpg'</span>,
+      <span class="cp">width</span>:  <span class="cs">1200</span>,
+      <span class="cp">height</span>: <span class="cs">630</span>,
+      <span class="cp">alt</span>:    <span class="cs">'Tartas artesanales de Más Cuqui'</span>,
+    }],
+  },
+  <span class="cp">twitter</span>: {
+    <span class="cp">card</span>:   <span class="cs">'summary_large_image'</span>,
+    <span class="cp">images</span>: [<span class="cs">'/images/og-image.jpg'</span>],
+  },
+}
+
+<span class="ck">const</span> <span class="cp">schemaOrg</span> = {
+  <span class="cs">"@context"</span>: <span class="cs">"https://schema.org"</span>,
+  <span class="cs">"@type"</span>:    <span class="cs">"Bakery"</span>,
+  <span class="cs">"name"</span>:     <span class="cs">"Más Cuqui"</span>,
+  <span class="cs">"url"</span>:      <span class="cs">"https://pasteleriamascuqui.vercel.app"</span>,
+  <span class="cs">"telephone"</span>: <span class="cs">"+34641384941"</span>,
+  <span class="cs">"address"</span>: {
+    <span class="cs">"@type"</span>: <span class="cs">"PostalAddress"</span>,
+    <span class="cs">"streetAddress"</span>: <span class="cs">"Calle Tinte, 17 Bajo"</span>,
+    <span class="cs">"addressLocality"</span>: <span class="cs">"Ciudad Real"</span>,
+    <span class="cs">"postalCode"</span>: <span class="cs">"13001"</span>,
+    <span class="cs">"addressCountry"</span>: <span class="cs">"ES"</span>,
+  },
+  <span class="cs">"openingHours"</span>: [<span class="cs">"Mo Tu We Th Fr 08:30-20:30"</span>, <span class="cs">"Sa 09:00-14:00"</span>],
+  <span class="cs">"aggregateRating"</span>: {
+    <span class="cs">"@type"</span>: <span class="cs">"AggregateRating"</span>,
+    <span class="cs">"ratingValue"</span>: <span class="cs">"4.8"</span>,
+    <span class="cs">"reviewCount"</span>: <span class="cs">"164"</span>,
+  },
+  <span class="cs">"sameAs"</span>: [
+    <span class="cs">"https://www.instagram.com/pasteleriamascuqui/"</span>,
+    <span class="cs">"https://www.facebook.com/101758689422174/"</span>,
+  ],
+}
+
+<span class="ck">export default function</span> <span class="cp">RootLayout</span>({ children }: { children: React.ReactNode }) {
+  <span class="ck">return</span> (
+    <span class="ct">&lt;html</span> <span class="cp">lang</span>=<span class="cs">"es"</span> <span class="cp">className</span>=<span class="cs">{`${playfair.variable} ${dmSans.variable}`}</span><span class="ct">&gt;</span>
+      <span class="ct">&lt;head&gt;</span>
+<span class="chl">        <span class="ct">&lt;script</span></span>
+<span class="chl">          <span class="cp">type</span>=<span class="cs">"application/ld+json"</span></span>
+<span class="chl">          <span class="cp">dangerouslySetInnerHTML</span>=<span class="cs">{{ __html: JSON.stringify(schemaOrg) }}</span></span>
+<span class="chl">        <span class="ct">/&gt;</span></span>
+      <span class="ct">&lt;/head&gt;</span>
+      <span class="ct">&lt;body&gt;</span>
+        {children}
+      <span class="ct">&lt;/body&gt;</span>
+    <span class="ct">&lt;/html&gt;</span>
+  )
+}</pre>
+    </div>
+
+    <div id="code-seo" class="sub-panel">
+      <div class="note"><div style="font-size:14px;">💡</div>Opcional: extrae la config de SEO a un helper para mantenerlo limpio · src/lib/seo.ts</div>
+<pre><span class="cc">// src/lib/seo.ts</span>
+<span class="cc">// Centraliza toda la config de SEO aquí</span>
+
+<span class="ck">export const</span> <span class="cp">siteConfig</span> = {
+  <span class="cp">name</span>:        <span class="cs">'Más Cuqui'</span>,
+  <span class="cp">url</span>:         <span class="cs">'https://pasteleriamascuqui.vercel.app'</span>,
+  <span class="cp">description</span>: <span class="cs">'Pastelería artesanal en Ciudad Real.'</span>,
+  <span class="cp">ogImage</span>:     <span class="cs">'/images/og-image.jpg'</span>,
+  <span class="cp">phone</span>:       <span class="cs">'+34641384941'</span>,
+  <span class="cp">address</span>:     <span class="cs">'Calle Tinte, 17 Bajo, Ciudad Real'</span>,
+  <span class="cp">rating</span>:      { value: <span class="cs">'4.8'</span>, count: <span class="cs">'164'</span> }, <span class="cc">// ← actualizar periódicamente</span>
+}
+
+<span class="ck">export function</span> <span class="cp">buildMetadata</span>(overrides = {}) {
+  <span class="ck">return</span> {
+    <span class="cp">title</span>:       `${siteConfig.name} — Pastelería Artesanal`,
+    <span class="cp">description</span>: siteConfig.description,
+    <span class="cp">openGraph</span>: {
+      <span class="cp">images</span>: [{ url: siteConfig.ogImage, width: <span class="cp">1200</span>, height: <span class="cp">630</span> }],
+      ...overrides,
+    },
+    ...overrides,
+  }
+}</pre>
+    </div>
+
+  </div>
+</div>
+
+<script>
+function switchTab(name) {
+  const names = ['overview','og','schema','code'];
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', names[i] === name));
+  document.querySelectorAll('.tab-content').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+}
+function switchFile(name) {
+  const names = ['layout','seo'];
+  document.querySelectorAll('.ftab').forEach((t,i) => t.classList.toggle('active', names[i] === name));
+  document.querySelectorAll('.sub-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('code-' + name).classList.add('active');
+}
+</script>
+</body>
+</html>

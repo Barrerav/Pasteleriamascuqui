@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fase 3 — Galería & Contadores · +Cuqui</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --cream: #fdf6f0; --cream-mid: #f5ede4; --cream-dark: #e8ddd4;
+  --rose: #c8706a; --rose-dark: #a85a55; --caramel: #f5a845;
+  --ink: #2d1f1a; --ink-soft: #7a5c55;
+  --green: oklch(58% 0.13 155); --green-light: oklch(93% 0.04 155);
+  --blue: oklch(58% 0.13 250); --blue-light: oklch(94% 0.04 250);
+}
+body { font-family: 'DM Sans', sans-serif; background: #ede6df; color: var(--ink); }
+
+/* TABS */
+.tabs { display:flex; gap:2px; background:#e0d9d0; padding:14px 28px 0; position:sticky; top:0; z-index:200; align-items:flex-end; }
+.tab { padding:9px 20px; border-radius:8px 8px 0 0; font-size:13px; font-weight:500; cursor:pointer; color:#7a6a62; background:#d4cdc5; transition:all 0.2s; user-select:none; }
+.tab.active { background:var(--cream); color:var(--ink); font-weight:600; padding-bottom:11px; }
+.tab-content { display:none; }
+.tab-content.active { display:block; }
+
+/* LAYOUT */
+.page-inner { max-width:1060px; margin:0 auto; padding:56px 40px 100px; }
+.section-eyebrow { font-size:10px; font-weight:700; letter-spacing:0.16em; text-transform:uppercase; color:var(--rose); margin-bottom:8px; }
+h2 { font-family:'Playfair Display',serif; font-size:32px; font-weight:400; margin-bottom:10px; }
+h2 em { font-style:italic; color:var(--rose); }
+.page-sub { font-size:15px; color:var(--ink-soft); margin-bottom:52px; max-width:580px; line-height:1.7; }
+
+/* CARDS */
+.task-card { background:white; border-radius:20px; overflow:hidden; border:1.5px solid var(--cream-dark); display:grid; grid-template-columns:5px 1fr; margin-bottom:28px; }
+.tc-accent   { background:var(--green); }
+.tc-accent.b { background:var(--blue); }
+.tc-body  { padding:28px 32px; }
+.tc-header { display:flex; align-items:center; gap:12px; margin-bottom:14px; flex-wrap:wrap; }
+.badge { font-size:10px; font-weight:700; letter-spacing:0.1em; text-transform:uppercase; padding:3px 10px; border-radius:100px; }
+.badge.g { background:var(--green-light); color:var(--green); }
+.badge.b { background:var(--blue-light); color:var(--blue); }
+.badge.t { background:var(--cream-mid); color:var(--ink-soft); }
+.tc-title { font-size:17px; font-weight:600; }
+.tc-desc { font-size:14px; color:var(--ink-soft); line-height:1.75; margin-bottom:20px; }
+.tc-desc strong { color:var(--ink); }
+code { font-family:'Courier New',monospace; font-size:12px; background:var(--cream-dark); padding:2px 6px; border-radius:4px; }
+
+/* CODE */
+.code-wrap { background:oklch(16% 0.01 260); border-radius:12px; margin-top:16px; overflow:hidden; }
+.code-file { background:oklch(20% 0.01 260); padding:9px 18px; font-family:'Courier New',monospace; font-size:11px; color:rgba(255,255,255,0.45); border-bottom:1px solid rgba(255,255,255,0.05); display:flex; align-items:center; gap:8px; }
+.code-file span { color:rgba(255,255,255,0.7); }
+.code-scroll { padding:20px 22px; overflow-x:auto; }
+pre { font-family:'Courier New',monospace; font-size:13px; line-height:1.9; color:oklch(82% 0.01 60); }
+.ck { color:oklch(68% 0.18 280); }
+.cs { color:oklch(72% 0.15 140); }
+.cc { color:oklch(50% 0.01 60); font-style:italic; }
+.cp { color:oklch(70% 0.15 50); }
+.ct { color:oklch(65% 0.14 200); }
+.cn { color:oklch(72% 0.18 60); }
+.chl { background:oklch(22% 0.04 60/0.5); display:block; margin:0 -22px; padding:0 22px; border-left:2px solid oklch(68% 0.14 55); }
+.note { background:oklch(20% 0.03 50/0.7); border:1px solid oklch(65% 0.13 55/0.3); border-radius:8px; padding:12px 16px; margin:0 0 18px; font-size:12px; color:oklch(78% 0.08 55); display:flex; align-items:flex-start; gap:10px; }
+
+/* CODE TAB */
+#panel-code { background:oklch(14% 0.01 260); }
+.code-header { background:oklch(18% 0.01 260); padding:18px 32px; border-bottom:1px solid rgba(255,255,255,0.06); display:flex; align-items:center; justify-content:space-between; }
+.file-tabs { display:flex; gap:2px; flex-wrap:wrap; }
+.ftab { font-family:'Courier New',monospace; font-size:12px; padding:7px 14px; border-radius:5px 5px 0 0; cursor:pointer; color:rgba(255,255,255,0.4); transition:all 0.2s; user-select:none; }
+.ftab.active { background:oklch(14% 0.01 260); color:rgba(255,255,255,0.88); }
+.code-body { padding:30px 40px; overflow-x:auto; }
+.sub-panel { display:none; }
+.sub-panel.active { display:block; }
+
+/* ── GALERÍA DEMO ── */
+.gallery-section { background:var(--cream); padding:64px 48px; }
+.gallery-eyebrow { text-align:center; font-size:10px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:var(--rose); margin-bottom:10px; }
+.gallery-title { font-family:'Playfair Display',serif; font-size:34px; font-weight:400; text-align:center; margin-bottom:10px; }
+.gallery-sub { text-align:center; font-size:14px; color:var(--ink-soft); margin-bottom:40px; }
+
+/* Filter tabs */
+.filter-tabs { display:flex; justify-content:center; gap:8px; margin-bottom:32px; flex-wrap:wrap; }
+.filter-btn {
+  padding:8px 18px; border-radius:100px; font-size:13px; font-weight:500;
+  cursor:pointer; border:1.5px solid var(--cream-dark); background:white;
+  color:var(--ink-soft); transition:all 0.2s; user-select:none;
+}
+.filter-btn.active, .filter-btn:hover {
+  background:var(--rose); color:white; border-color:var(--rose);
+}
+
+/* Grid */
+.gallery-grid {
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  grid-auto-rows:200px;
+  gap:8px;
+  max-width:1000px;
+  margin:0 auto;
+}
+.g-cell {
+  border-radius:10px; overflow:hidden; cursor:pointer;
+  position:relative; transition:transform 0.2s;
+}
+.g-cell:hover { transform:scale(1.02); z-index:2; }
+.g-cell.wide { grid-column:span 2; }
+.g-cell.tall { grid-row:span 2; }
+.g-inner {
+  width:100%; height:100%;
+  display:flex; align-items:center; justify-content:center;
+  font-size:32px; transition:transform 0.35s ease;
+  position:relative;
+}
+.g-cell:hover .g-inner { transform:scale(1.06); }
+.g-overlay {
+  position:absolute; inset:0;
+  background:rgba(20,8,5,0); transition:background 0.25s;
+  display:flex; align-items:center; justify-content:center;
+}
+.g-cell:hover .g-overlay { background:rgba(20,8,5,0.35); }
+.g-zoom { color:white; font-size:24px; opacity:0; transition:opacity 0.2s; }
+.g-cell:hover .g-zoom { opacity:1; }
+.g-label {
+  position:absolute; bottom:0; left:0; right:0;
+  background:linear-gradient(to top, rgba(20,8,5,0.7), transparent);
+  padding:20px 12px 10px;
+  font-size:11px; color:rgba(255,255,255,0.9); font-weight:500;
+  opacity:0; transition:opacity 0.25s;
+  letter-spacing:0.04em;
+}
+.g-cell:hover .g-label { opacity:1; }
+
+/* Lightbox */
+.lightbox {
+  position:fixed; inset:0; z-index:1000;
+  background:rgba(15,6,4,0.92); backdrop-filter:blur(6px);
+  display:flex; align-items:center; justify-content:center;
+  opacity:0; pointer-events:none; transition:opacity 0.3s;
+}
+.lightbox.open { opacity:1; pointer-events:all; }
+.lb-img-wrap {
+  position:relative; max-width:800px; max-height:80vh;
+  border-radius:12px; overflow:hidden;
+  box-shadow:0 24px 80px rgba(0,0,0,0.5);
+  transform:scale(0.9); transition:transform 0.3s;
+}
+.lightbox.open .lb-img-wrap { transform:scale(1); }
+.lb-img {
+  width:100%; height:100%; object-fit:contain;
+  display:flex; align-items:center; justify-content:center;
+  min-width:500px; min-height:350px; font-size:64px;
+}
+.lb-close {
+  position:absolute; top:16px; right:16px;
+  width:36px; height:36px; border-radius:50%;
+  background:rgba(255,255,255,0.15); border:1px solid rgba(255,255,255,0.2);
+  color:white; font-size:18px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:background 0.2s;
+}
+.lb-close:hover { background:rgba(255,255,255,0.3); }
+.lb-nav {
+  position:absolute; top:50%; transform:translateY(-50%);
+  width:44px; height:44px; border-radius:50%;
+  background:rgba(255,255,255,0.12); border:1px solid rgba(255,255,255,0.2);
+  color:white; font-size:20px; cursor:pointer;
+  display:flex; align-items:center; justify-content:center;
+  transition:background 0.2s;
+}
+.lb-nav:hover { background:rgba(255,255,255,0.25); }
+.lb-prev { left:-60px; }
+.lb-next { right:-60px; }
+.lb-caption {
+  position:absolute; bottom:-40px; left:0; right:0;
+  text-align:center; font-size:13px; color:rgba(255,255,255,0.65);
+}
+.lb-counter {
+  position:fixed; top:24px; left:50%; transform:translateX(-50%);
+  font-size:12px; color:rgba(255,255,255,0.5); letter-spacing:0.1em;
+  background:rgba(0,0,0,0.3); padding:4px 14px; border-radius:100px;
+}
+
+.gallery-cta { text-align:center; margin-top:32px; }
+.btn-ig {
+  display:inline-flex; align-items:center; gap:9px;
+  border:1.5px solid var(--cream-dark); background:white;
+  padding:12px 24px; border-radius:100px;
+  font-size:14px; font-weight:500; color:var(--ink-soft);
+  text-decoration:none; cursor:default; transition:all 0.2s;
+}
+.btn-ig:hover { border-color:var(--rose); color:var(--rose); }
+
+/* ── CONTADORES DEMO ── */
+.stats-section { background:oklch(30% 0.05 30); padding:64px 48px; }
+.stats-title { font-family:'Playfair Display',serif; font-size:30px; font-weight:400; text-align:center; color:white; margin-bottom:8px; }
+.stats-eyebrow { text-align:center; font-size:10px; font-weight:700; letter-spacing:0.18em; text-transform:uppercase; color:oklch(60% 0.08 50); margin-bottom:10px; }
+.stats-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:1px; max-width:860px; margin:48px auto 0; background:rgba(255,255,255,0.1); border-radius:16px; overflow:hidden; }
+.stat-item { padding:32px 24px; text-align:center; background:oklch(30% 0.05 30); }
+.stat-num { font-family:'Playfair Display',serif; font-size:48px; font-weight:400; color:var(--caramel); line-height:1; margin-bottom:8px; }
+.stat-label { font-size:13px; color:rgba(255,255,255,0.6); line-height:1.4; }
+.stat-suffix { font-size:28px; }
+
+/* demo controls */
+.demo-controls { display:flex; gap:12px; justify-content:center; margin-top:32px; flex-wrap:wrap; }
+.demo-btn {
+  padding:10px 20px; border-radius:100px; font-size:13px; font-weight:600;
+  cursor:pointer; transition:all 0.2s; border:none;
+}
+.demo-reset { background:rgba(255,255,255,0.1); color:white; border:1px solid rgba(255,255,255,0.2); }
+.demo-reset:hover { background:rgba(255,255,255,0.2); }
+.demo-trigger { background:var(--caramel); color:var(--ink); }
+.demo-trigger:hover { filter:brightness(1.1); }
+.demo-note { text-align:center; margin-top:16px; font-size:12px; color:rgba(255,255,255,0.4); }
+
+/* info box */
+.info-box { border-radius:12px; padding:16px 20px; margin-top:16px; }
+.info-green { background:oklch(93% 0.04 155); border-left:3px solid var(--green); }
+.info-rose  { background:#fdf0ec; border-left:3px solid var(--rose); }
+.info-box p { font-size:13px; line-height:1.7; color:var(--ink-soft); }
+.info-box strong { color:var(--ink); }
+</style>
+</head>
+<body>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('gallery')">🖼 Galería con lightbox</div>
+  <div class="tab" onclick="switchTab('counters')">🔢 Contadores animados</div>
+  <div class="tab" onclick="switchTab('code')">💻 Código completo</div>
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- GALERÍA DEMO -->
+<!-- ══════════════════════════════════════════ -->
+<div id="panel-gallery" class="tab-content active">
+
+  <!-- Explicación -->
+  <div class="page-inner" style="padding-bottom:0;">
+    <div class="section-eyebrow">Fase 3 · Tarea 1</div>
+    <h2>Galería con <em>lightbox</em> y filtros</h2>
+    <p class="page-sub">La galería actual no hace nada al hacer click. Con este rediseño cada foto se puede ampliar, navegar con flechas y filtrar por categoría. Interactúa con la demo de abajo.</p>
+
+    <div class="task-card">
+      <div class="tc-accent"></div>
+      <div class="tc-body">
+        <div class="tc-header">
+          <span class="badge g">Mejora</span>
+          <span class="tc-title">Dos cambios: lightbox al click + filtros por categoría</span>
+          <span class="badge t" style="margin-left:auto;">~2–3h</span>
+        </div>
+        <p class="tc-desc">
+          <strong>Lightbox:</strong> al hacer click en una foto, se abre a pantalla completa con overlay oscuro, flechas de navegación y tecla ESC para cerrar.<br>
+          <strong>Filtros:</strong> botones para ver solo Cafetería / Pastelería / Desayunos / Eventos.
+        </p>
+        <div class="info-box info-rose">
+          <p><strong>Librería recomendada:</strong> <code>yet-another-react-lightbox</code> — 11kb gzipped, sin dependencias, compatible con Next.js Image. <code>npm install yet-another-react-lightbox</code></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- GALERÍA INTERACTIVA -->
+  <section class="gallery-section">
+    <div class="gallery-eyebrow">Nuestros momentos</div>
+    <h2 class="gallery-title">Galería</h2>
+    <p class="gallery-sub">Un vistazo a lo que cocinamos cada día con amor en nuestro obrador.</p>
+
+    <div class="filter-tabs">
+      <div class="filter-btn active" onclick="filterGallery('all', this)">Todos</div>
+      <div class="filter-btn" onclick="filterGallery('cafeteria', this)">☕ Cafetería</div>
+      <div class="filter-btn" onclick="filterGallery('pasteleria', this)">🎂 Pastelería</div>
+      <div class="filter-btn" onclick="filterGallery('desayunos', this)">🥐 Desayunos</div>
+      <div class="filter-btn" onclick="filterGallery('eventos', this)">🎉 Eventos</div>
+    </div>
+
+    <div class="gallery-grid" id="galleryGrid">
+      <div class="g-cell wide" data-cat="pasteleria" data-idx="0" onclick="openLightbox(0)">
+        <div class="g-inner" style="background:linear-gradient(135deg,#fde8b0,#f5c060,#e8a030)">🎂
+          <div class="g-overlay"><div class="g-zoom">⊕</div></div>
+          <div class="g-label">Tarta de cumpleaños · pasteleria</div>
+        </div>
+      </div>
+      <div class="g-cell" data-cat="cafeteria" data-idx="1" onclick="openLightbox(1)">
+        <div class="g-inner" style="background:linear-gradient(135deg,#e8c8a0,#c89060,#a86030)">☕
+          <div class="g-overlay"><div class="g-zoom">⊕</div></div>
+          <div class="g-label">Arte latte · cafeteria</div>
+        </div>
+      </div>
+      <div class="g-cell tall" data-cat="pasteleria" data-idx="2" onclick="openLightbox(2)">
+        <div class="g-inner" style="background:linear-gradient(135deg,#fdd0a0,#f5a060,#d07030);height:100%">🍰
+          <div class="g-overlay"><div class="g-zoom">⊕</div></div>
+          <div class="g-label">Roscón de Reyes · pasteleria</div>
+        </div>
+      </div>
+      <div class="g-cell" data-cat="desayunos" data-idx="3" onclick="openLightbox(3)">
+        <div class="g-inner" style="background:linear-gradient(135deg,#fde0e0,#f0a0a0,#d07070)">🥐
+          <div class="g-overlay"><div class="g-zoom">⊕</div></div>
+          <div class="g-label">Cachitos venezolanos · desayunos</div>
+        </div>
+      </div>
+      <div class="g-cell" data-cat="cafeteria" data-idx="4" onclick="openLightbox(4)">
+        <div class="g-inner" style="background:linear-gradient(135deg,#d0e8f0,#90b8d0,#507090)">🧋
+          <div class="g-overlay"><div class="g-zoom">⊕</div></div>
+          <div class="g-label">Iced latte verano · cafeteria</div>
+        </div>
+      </div>
+      <div class="g-cell" data-cat="eventos" data-idx="5" onclick="openLightbox(5)">
+        <div class="g-inner" style="background:linear-gradient(135deg,#fdd0e8,#f090b0,#d06080)">🎉
+          <div class="g-overlay"><div class="g-zoom">⊕</div></div>
+          <div class="g-label">San Valentín · eventos</div>
+        </div>
+      </div>
+      <div class="g-cell" data-cat="desayunos" data-idx="6" onclick="openLightbox(6)">
+        <div class="g-inner" style="background:linear-gradient(135deg,#f0e8c0,#d0b870,#a08030)">🍞
+          <div class="g-overlay"><div class="g-zoom">⊕</div></div>
+          <div class="g-label">Croissant artesanal · desayunos</div>
+        </div>
+      </div>
+      <div class="g-cell" data-cat="cafeteria" data-idx="7" onclick="openLightbox(7)">
+        <div class="g-inner" style="background:linear-gradient(135deg,#e8d0b0,#c09060,#906030)">🍫
+          <div class="g-overlay"><div class="g-zoom">⊕</div></div>
+          <div class="g-label">Mocaccino vegetal · cafeteria</div>
+        </div>
+      </div>
+      <div class="g-cell" data-cat="pasteleria" data-idx="8" onclick="openLightbox(8)">
+        <div class="g-inner" style="background:linear-gradient(135deg,#e0d0f0,#b090d0,#806090)">🧁
+          <div class="g-overlay"><div class="g-zoom">⊕</div></div>
+          <div class="g-label">Cupcakes · pasteleria</div>
+        </div>
+      </div>
+      <div class="g-cell" data-cat="eventos" data-idx="9" onclick="openLightbox(9)">
+        <div class="g-inner" style="background:linear-gradient(135deg,#f0e0d0,#d0a080,#a06040)">🎂
+          <div class="g-overlay"><div class="g-zoom">⊕</div></div>
+          <div class="g-label">4to Aniversario · eventos</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="gallery-cta">
+      <div class="btn-ig">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="5"/><circle cx="17.5" cy="6.5" r="1.5" fill="currentColor" stroke="none"/></svg>
+        Ver más en Instagram
+      </div>
+    </div>
+  </section>
+
+  <!-- LIGHTBOX -->
+  <div class="lightbox" id="lightbox" onclick="closeLightbox(event)">
+    <div class="lb-counter" id="lbCounter">1 / 10</div>
+    <div class="lb-img-wrap" id="lbWrap">
+      <div class="lb-img" id="lbImg">🎂</div>
+      <div class="lb-close" onclick="closeLightbox()">✕</div>
+      <div class="lb-nav lb-prev" onclick="lbNav(-1,event)">‹</div>
+      <div class="lb-nav lb-next" onclick="lbNav(1,event)">›</div>
+      <div class="lb-caption" id="lbCaption">Tarta de cumpleaños</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- CONTADORES DEMO -->
+<!-- ══════════════════════════════════════════ -->
+<div id="panel-counters" class="tab-content">
+  <div class="page-inner" style="padding-bottom:0;">
+    <div class="section-eyebrow">Fase 3 · Tarea 2</div>
+    <h2>Contadores <em>animados</em> — fix</h2>
+    <p class="page-sub">El problema actual: los contadores arrancan en 0 aunque ya sean visibles, y si el IntersectionObserver no dispara (por scroll rápido o móvil), se quedan en 0 para siempre. Esta versión lo arregla.</p>
+
+    <div class="task-card">
+      <div class="tc-accent b"></div>
+      <div class="tc-body">
+        <div class="tc-header">
+          <span class="badge b">Fix</span>
+          <span class="tc-title">Dos problemas, una solución</span>
+          <span class="badge t" style="margin-left:auto;">~30 min</span>
+        </div>
+        <p class="tc-desc">
+          <strong>Problema 1:</strong> Los contadores se activan aunque el usuario ya los vea al cargar la página (sin hacer scroll).<br>
+          <strong>Problema 2:</strong> Si el usuario scrollea muy rápido y el observer no dispara en tiempo, los números se quedan en 0.<br>
+          <strong>Solución:</strong> IntersectionObserver con <code>threshold: 0.2</code> + fallback automático de 2 segundos.
+        </p>
+        <div class="info-box info-green">
+          <p><strong>Regla:</strong> Si el elemento ya es visible al cargar → animar inmediatamente. Si entra por scroll → animar al entrar. Si pasan 2s sin animarse → mostrar valor final directo.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats demo interactiva -->
+  <section class="stats-section">
+    <div class="stats-eyebrow">En números</div>
+    <div class="stats-title">Cuatro años endulzando Ciudad Real</div>
+    <div class="stats-grid">
+      <div class="stat-item">
+        <div class="stat-num" id="cnt-years">0</div>
+        <div class="stat-label">Años endulzando<br>Ciudad Real</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" id="cnt-followers">0<span class="stat-suffix">K</span></div>
+        <div class="stat-label">Comunidad en<br>Instagram</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" id="cnt-posts">0</div>
+        <div class="stat-label">Publicaciones<br>en redes</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num" id="cnt-rating">0.0<span class="stat-suffix">★</span></div>
+        <div class="stat-label">Estrellas en<br>Google Maps</div>
+      </div>
+    </div>
+    <div class="demo-controls">
+      <button class="demo-btn demo-reset" onclick="resetCounters()">↺ Resetear a 0</button>
+      <button class="demo-btn demo-trigger" onclick="triggerCounters()">▶ Animar contadores</button>
+    </div>
+    <div class="demo-note">En producción se activan automáticamente al entrar en el viewport</div>
+  </section>
+
+</div>
+
+<!-- ══════════════════════════════════════════ -->
+<!-- CÓDIGO -->
+<!-- ══════════════════════════════════════════ -->
+<div id="panel-code" class="tab-content">
+  <div class="code-header">
+    <div class="file-tabs">
+      <div class="ftab active" onclick="switchFile('gallery')">Gallery.tsx</div>
+      <div class="ftab" onclick="switchFile('lightbox')">uso lightbox</div>
+      <div class="ftab" onclick="switchFile('counters')">useCounter.ts</div>
+      <div class="ftab" onclick="switchFile('stats')">StatsSection.tsx</div>
+    </div>
+    <div style="font-size:11px; color:rgba(255,255,255,0.28);">Código listo para copiar</div>
+  </div>
+  <div class="code-body">
+
+    <!-- Gallery.tsx -->
+    <div id="code-gallery" class="sub-panel active">
+      <div class="note"><div>📁</div>src/components/Gallery.tsx — galería con filtros</div>
+<pre><span class="cs">'use client'</span>
+<span class="ck">import</span> { <span class="cp">useState</span> } <span class="ck">from</span> <span class="cs">'react'</span>
+<span class="ck">import</span> <span class="cx">Image</span> <span class="ck">from</span> <span class="cs">'next/image'</span>
+<span class="ck">import</span> <span class="cx">Lightbox</span> <span class="ck">from</span> <span class="cs">'yet-another-react-lightbox'</span>
+<span class="ck">import</span> <span class="cs">'yet-another-react-lightbox/styles.css'</span>
+<span class="ck">import</span> { <span class="cp">galleryPhotos</span> } <span class="ck">from</span> <span class="cs">'@/data/photos'</span>
+<span class="ck">import</span> <span class="cs">'./gallery.css'</span>
+
+<span class="cc">// Categorías para el filtro</span>
+<span class="ck">const</span> <span class="cp">CATS</span> = [
+  { <span class="cp">id</span>: <span class="cs">'all'</span>,       <span class="cp">label</span>: <span class="cs">'Todos'</span>     },
+  { <span class="cp">id</span>: <span class="cs">'cafeteria'</span>, <span class="cp">label</span>: <span class="cs">'☕ Cafetería'</span>  },
+  { <span class="cp">id</span>: <span class="cs">'pasteleria'</span>,<span class="cp">label</span>: <span class="cs">'🎂 Pastelería'</span> },
+  { <span class="cp">id</span>: <span class="cs">'desayunos'</span>, <span class="cp">label</span>: <span class="cs">'🥐 Desayunos'</span>  },
+  { <span class="cp">id</span>: <span class="cs">'eventos'</span>,   <span class="cp">label</span>: <span class="cs">'🎉 Eventos'</span>    },
+]
+
+<span class="ck">export default function</span> <span class="cp">Gallery</span>() {
+  <span class="ck">const</span> [<span class="cp">cat</span>, <span class="cp">setCat</span>]   = <span class="cp">useState</span>(<span class="cs">'all'</span>)
+  <span class="ck">const</span> [<span class="cp">idx</span>, <span class="cp">setIdx</span>]   = <span class="cp">useState</span>(-<span class="cn">1</span>)  <span class="cc">// -1 = lightbox cerrado</span>
+
+  <span class="ck">const</span> <span class="cp">filtered</span> = galleryPhotos
+    .filter(p => cat === <span class="cs">'all'</span> || p.cat === cat)
+
+  <span class="ck">return</span> (
+    <span class="ct">&lt;section</span> <span class="cp">className</span>=<span class="cs">"gallery-section"</span> <span class="cp">id</span>=<span class="cs">"galeria"</span><span class="ct">&gt;</span>
+      <span class="ct">&lt;p</span> <span class="cp">className</span>=<span class="cs">"section-eyebrow"</span><span class="ct">&gt;</span>Nuestros momentos<span class="ct">&lt;/p&gt;</span>
+      <span class="ct">&lt;h2</span> <span class="cp">className</span>=<span class="cs">"section-title"</span><span class="ct">&gt;</span>Galería<span class="ct">&lt;/h2&gt;</span>
+
+      <span class="cc">{"/* ── Filtros ── */"}</span>
+<span class="chl">      <span class="ct">&lt;div</span> <span class="cp">className</span>=<span class="cs">"filter-tabs"</span><span class="ct">&gt;</span></span>
+<span class="chl">        {CATS.map(c => (</span>
+<span class="chl">          <span class="ct">&lt;button</span></span>
+<span class="chl">            <span class="cp">key</span>=<span class="cs">{c.id}</span></span>
+<span class="chl">            <span class="cp">className</span>=<span class="cs">{`filter-btn ${cat === c.id ? 'active' : ''}`}</span></span>
+<span class="chl">            <span class="cp">onClick</span>=<span class="cs">{() => setCat(c.id)}</span></span>
+<span class="chl">          <span class="ct">&gt;</span>{c.label}<span class="ct">&lt;/button&gt;</span></span>
+<span class="chl">        ))}</span>
+<span class="chl">      <span class="ct">&lt;/div&gt;</span></span>
+
+      <span class="cc">{"/* ── Grid de fotos ── */"}</span>
+      <span class="ct">&lt;div</span> <span class="cp">className</span>=<span class="cs">"gallery-grid"</span><span class="ct">&gt;</span>
+        {filtered.map((photo, i) => (
+          <span class="ct">&lt;div</span>
+            <span class="cp">key</span>=<span class="cs">{photo.src}</span>
+            <span class="cp">className</span>=<span class="cs">"g-cell"</span>
+<span class="chl">            <span class="cp">onClick</span>=<span class="cs">{() => setIdx(i)}</span>  <span class="cc">// ← abre el lightbox</span></span>
+          <span class="ct">&gt;</span>
+            <span class="ct">&lt;Image</span>
+              <span class="cp">src</span>=<span class="cs">{photo.src}</span> <span class="cp">alt</span>=<span class="cs">{photo.alt}</span>
+              <span class="cp">fill</span> <span class="cp">className</span>=<span class="cs">"g-img"</span>
+              <span class="cp">sizes</span>=<span class="cs">"(max-width:768px) 50vw, 25vw"</span>
+            <span class="ct">/&gt;</span>
+          <span class="ct">&lt;/div&gt;</span>
+        ))}
+      <span class="ct">&lt;/div&gt;</span>
+
+      <span class="cc">{"/* ── Lightbox ── */"}</span>
+<span class="chl">      <span class="ct">&lt;Lightbox</span></span>
+<span class="chl">        <span class="cp">open</span>=<span class="cs">{idx >= 0}</span></span>
+<span class="chl">        <span class="cp">index</span>=<span class="cs">{idx}</span></span>
+<span class="chl">        <span class="cp">close</span>=<span class="cs">{() => setIdx(-1)}</span></span>
+<span class="chl">        <span class="cp">slides</span>=<span class="cs">{filtered.map(p => ({ src: p.src, alt: p.alt }))}</span></span>
+<span class="chl">      <span class="ct">/&gt;</span></span>
+
+    <span class="ct">&lt;/section&gt;</span>
+  )
+}</pre>
+    </div>
+
+    <!-- Lightbox install -->
+    <div id="code-lightbox" class="sub-panel">
+      <div class="note"><div>📦</div>Instalación y configuración de yet-another-react-lightbox</div>
+<pre><span class="cc"># 1. Instalar la librería</span>
+npm install yet-another-react-lightbox
+
+<span class="cc"># 2. Plugins opcionales (recomendados)</span>
+<span class="cc"># Captions — muestra el alt text como pie de foto</span>
+<span class="cc"># Thumbnails — tira de miniaturas abajo</span>
+<span class="cc"># Zoom — pellizco para zoom en móvil</span>
+
+<span class="cc">-----------------------------------------</span>
+<span class="cc"># Con plugins activados:</span>
+
+<span class="ck">import</span> <span class="cx">Lightbox</span> <span class="ck">from</span> <span class="cs">'yet-another-react-lightbox'</span>
+<span class="ck">import</span> <span class="cx">Captions</span>   <span class="ck">from</span> <span class="cs">'yet-another-react-lightbox/plugins/captions'</span>
+<span class="ck">import</span> <span class="cx">Thumbnails</span> <span class="ck">from</span> <span class="cs">'yet-another-react-lightbox/plugins/thumbnails'</span>
+<span class="ck">import</span> <span class="cx">Zoom</span>       <span class="ck">from</span> <span class="cs">'yet-another-react-lightbox/plugins/zoom'</span>
+<span class="ck">import</span> <span class="cs">'yet-another-react-lightbox/styles.css'</span>
+<span class="ck">import</span> <span class="cs">'yet-another-react-lightbox/plugins/captions.css'</span>
+<span class="ck">import</span> <span class="cs">'yet-another-react-lightbox/plugins/thumbnails.css'</span>
+
+<span class="ct">&lt;Lightbox</span>
+  <span class="cp">open</span>=<span class="cs">{idx >= 0}</span>
+  <span class="cp">index</span>=<span class="cs">{idx}</span>
+  <span class="cp">close</span>=<span class="cs">{() => setIdx(-1)}</span>
+  <span class="cp">slides</span>=<span class="cs">{filtered.map(p => ({</span>
+    <span class="cs">src</span>:         <span class="cs">p.src,</span>
+    <span class="cs">alt</span>:         <span class="cs">p.alt,</span>
+    <span class="cs">description</span>: <span class="cs">p.alt,</span>  <span class="cc">// para plugin Captions</span>
+  <span class="cs">}))}</span>
+  <span class="cp">plugins</span>=<span class="cs">{[Captions, Thumbnails, Zoom]}</span>
+  <span class="cp">captions</span>=<span class="cs">{{ descriptionTextAlign: 'center' }}</span>
+<span class="ct">/&gt;</span></pre>
+    </div>
+
+    <!-- useCounter.ts -->
+    <div id="code-counters" class="sub-panel">
+      <div class="note"><div>📁</div>src/hooks/useCounter.ts — hook reutilizable con fallback</div>
+<pre><span class="cs">'use client'</span>
+<span class="ck">import</span> { <span class="cp">useEffect</span>, <span class="cp">useRef</span>, <span class="cp">useState</span> } <span class="ck">from</span> <span class="cs">'react'</span>
+
+<span class="ck">interface</span> <span class="cp">Options</span> {
+  <span class="cp">target</span>:    <span class="ck">number</span>   <span class="cc">// valor final</span>
+  <span class="cp">duration</span>?: <span class="ck">number</span>   <span class="cc">// ms de animación (default 1800)</span>
+  <span class="cp">decimals</span>?: <span class="ck">number</span>   <span class="cc">// decimales (default 0)</span>
+  <span class="cp">fallback</span>?: <span class="ck">number</span>   <span class="cc">// ms antes de mostrar valor final (default 2000)</span>
+}
+
+<span class="ck">export function</span> <span class="cp">useCounter</span>(ref: React.RefObject&lt;Element&gt;, opts: Options) {
+  <span class="ck">const</span> { <span class="cp">target</span>, <span class="cp">duration</span> = <span class="cn">1800</span>, <span class="cp">decimals</span> = <span class="cn">0</span>, <span class="cp">fallback</span> = <span class="cn">2000</span> } = opts
+  <span class="ck">const</span> [<span class="cp">value</span>, <span class="cp">setValue</span>] = <span class="cp">useState</span>(<span class="cn">0</span>)
+  <span class="ck">const</span> <span class="cp">animated</span> = <span class="cp">useRef</span>(<span class="cs">false</span>)
+
+  <span class="ck">const</span> <span class="cp">animate</span> = () => {
+    <span class="ck">if</span> (animated.current) <span class="ck">return</span>
+    animated.current = <span class="cs">true</span>
+    <span class="ck">const</span> <span class="cp">start</span> = performance.now()
+    <span class="ck">const</span> <span class="cp">tick</span> = (now: <span class="ck">number</span>) => {
+      <span class="ck">const</span> <span class="cp">progress</span> = Math.min((now - start) / duration, <span class="cn">1</span>)
+      <span class="ck">const</span> <span class="cp">ease</span> = <span class="cn">1</span> - Math.pow(<span class="cn">1</span> - progress, <span class="cn">3</span>)  <span class="cc">// easeOutCubic</span>
+      <span class="cp">setValue</span>(parseFloat((ease * target).toFixed(decimals)))
+      <span class="ck">if</span> (progress < <span class="cn">1</span>) requestAnimationFrame(tick)
+    }
+    requestAnimationFrame(tick)
+  }
+
+  <span class="cp">useEffect</span>(() => {
+    <span class="ck">if</span> (!ref.current) <span class="ck">return</span>
+
+<span class="chl">    <span class="cc">// ① Si ya es visible al cargar → animar inmediatamente</span></span>
+<span class="chl">    <span class="ck">const</span> <span class="cp">rect</span> = ref.current.getBoundingClientRect()</span>
+<span class="chl">    <span class="ck">if</span> (rect.top < window.innerHeight) {</span>
+<span class="chl">      animate(); <span class="ck">return</span></span>
+<span class="chl">    }</span>
+
+<span class="chl">    <span class="cc">// ② Si entra por scroll → animar al entrar</span></span>
+<span class="chl">    <span class="ck">const</span> <span class="cp">obs</span> = <span class="ck">new</span> IntersectionObserver(</span>
+<span class="chl">      ([entry]) => { <span class="ck">if</span> (entry.isIntersecting) { animate(); obs.disconnect() } },</span>
+<span class="chl">      { threshold: <span class="cn">0.2</span> }</span>
+<span class="chl">    )</span>
+<span class="chl">    obs.observe(ref.current)</span>
+
+<span class="chl">    <span class="cc">// ③ Fallback: si pasan 2s sin animarse → mostrar valor final</span></span>
+<span class="chl">    <span class="ck">const</span> <span class="cp">timer</span> = setTimeout(() => {</span>
+<span class="chl">      <span class="ck">if</span> (!animated.current) { animate() }</span>
+<span class="chl">    }, fallback)</span>
+
+    <span class="ck">return</span> () => { obs.disconnect(); clearTimeout(timer) }
+  }, [ref])
+
+  <span class="ck">return</span> value
+}</pre>
+    </div>
+
+    <!-- StatsSection.tsx -->
+    <div id="code-stats" class="sub-panel">
+      <div class="note"><div>📁</div>src/components/StatsSection.tsx — usa el hook useCounter</div>
+<pre><span class="cs">'use client'</span>
+<span class="ck">import</span> { <span class="cp">useRef</span> } <span class="ck">from</span> <span class="cs">'react'</span>
+<span class="ck">import</span> { <span class="cp">useCounter</span> } <span class="ck">from</span> <span class="cs">'@/hooks/useCounter'</span>
+
+<span class="ck">export default function</span> <span class="cp">StatsSection</span>() {
+  <span class="ck">const</span> <span class="cp">sectionRef</span> = <span class="cp">useRef</span>&lt;HTMLElement&gt;(<span class="cs">null</span>)
+
+  <span class="cc">// Un ref por contador</span>
+  <span class="ck">const</span> <span class="cp">r1</span> = <span class="cp">useRef</span>&lt;HTMLDivElement&gt;(<span class="cs">null</span>)
+  <span class="ck">const</span> <span class="cp">r2</span> = <span class="cp">useRef</span>&lt;HTMLDivElement&gt;(<span class="cs">null</span>)
+  <span class="ck">const</span> <span class="cp">r3</span> = <span class="cp">useRef</span>&lt;HTMLDivElement&gt;(<span class="cs">null</span>)
+  <span class="ck">const</span> <span class="cp">r4</span> = <span class="cp">useRef</span>&lt;HTMLDivElement&gt;(<span class="cs">null</span>)
+
+  <span class="cc">// Valores animados — target, duración, decimales</span>
+<span class="chl">  <span class="ck">const</span> <span class="cp">years</span>     = <span class="cp">useCounter</span>(r1, { target: <span class="cn">4</span>   })</span>
+<span class="chl">  <span class="ck">const</span> <span class="cp">followers</span> = <span class="cp">useCounter</span>(r2, { target: <span class="cn">3</span>, duration: <span class="cn">2000</span> })</span>
+<span class="chl">  <span class="ck">const</span> <span class="cp">posts</span>     = <span class="cp">useCounter</span>(r3, { target: <span class="cn">166</span> })</span>
+<span class="chl">  <span class="ck">const</span> <span class="cp">rating</span>    = <span class="cp">useCounter</span>(r4, { target: <span class="cn">4.8</span>, decimals: <span class="cn">1</span> })</span>
+
+  <span class="ck">return</span> (
+    <span class="ct">&lt;section</span> <span class="cp">className</span>=<span class="cs">"stats-section"</span> <span class="cp">ref</span>=<span class="cs">{sectionRef}</span><span class="ct">&gt;</span>
+      <span class="ct">&lt;div</span> <span class="cp">className</span>=<span class="cs">"stats-grid"</span><span class="ct">&gt;</span>
+
+        <span class="ct">&lt;div</span> <span class="cp">ref</span>=<span class="cs">{r1}</span> <span class="cp">className</span>=<span class="cs">"stat-item"</span><span class="ct">&gt;</span>
+          <span class="ct">&lt;span</span> <span class="cp">className</span>=<span class="cs">"stat-num"</span><span class="ct">&gt;</span>{years}<span class="ct">&lt;/span&gt;</span>
+          <span class="ct">&lt;p</span><span class="ct">&gt;</span>Años endulzando Ciudad Real<span class="ct">&lt;/p&gt;</span>
+        <span class="ct">&lt;/div&gt;</span>
+
+        <span class="ct">&lt;div</span> <span class="cp">ref</span>=<span class="cs">{r2}</span> <span class="cp">className</span>=<span class="cs">"stat-item"</span><span class="ct">&gt;</span>
+          <span class="ct">&lt;span</span> <span class="cp">className</span>=<span class="cs">"stat-num"</span><span class="ct">&gt;</span>{followers}<span class="ct">&lt;span&gt;</span>K<span class="ct">&lt;/span&gt;&lt;/span&gt;</span>
+          <span class="ct">&lt;p&gt;</span>Comunidad en Instagram<span class="ct">&lt;/p&gt;</span>
+        <span class="ct">&lt;/div&gt;</span>
+
+        <span class="ct">&lt;div</span> <span class="cp">ref</span>=<span class="cs">{r3}</span> <span class="cp">className</span>=<span class="cs">"stat-item"</span><span class="ct">&gt;</span>
+          <span class="ct">&lt;span</span> <span class="cp">className</span>=<span class="cs">"stat-num"</span><span class="ct">&gt;</span>{posts}<span class="ct">&lt;/span&gt;</span>
+          <span class="ct">&lt;p&gt;</span>Publicaciones en redes<span class="ct">&lt;/p&gt;</span>
+        <span class="ct">&lt;/div&gt;</span>
+
+        <span class="ct">&lt;div</span> <span class="cp">ref</span>=<span class="cs">{r4}</span> <span class="cp">className</span>=<span class="cs">"stat-item"</span><span class="ct">&gt;</span>
+          <span class="ct">&lt;span</span> <span class="cp">className</span>=<span class="cs">"stat-num"</span><span class="ct">&gt;</span>{rating}<span class="ct">&lt;span&gt;</span>★<span class="ct">&lt;/span&gt;&lt;/span&gt;</span>
+          <span class="ct">&lt;p&gt;</span>Estrellas en Google Maps<span class="ct">&lt;/p&gt;</span>
+        <span class="ct">&lt;/div&gt;</span>
+
+      <span class="ct">&lt;/div&gt;</span>
+    <span class="ct">&lt;/section&gt;</span>
+  )
+}</pre>
+    </div>
+
+  </div>
+</div>
+
+<script>
+// ── Tab switching ──
+function switchTab(name) {
+  const names = ['gallery','counters','code'];
+  document.querySelectorAll('.tab').forEach((t,i) => t.classList.toggle('active', names[i] === name));
+  document.querySelectorAll('.tab-content').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+}
+function switchFile(name) {
+  const names = ['gallery','lightbox','counters','stats'];
+  document.querySelectorAll('.ftab').forEach((t,i) => t.classList.toggle('active', names[i] === name));
+  document.querySelectorAll('.sub-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('code-' + name).classList.add('active');
+}
+
+// ── Gallery filter ──
+function filterGallery(cat, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('#galleryGrid .g-cell').forEach(cell => {
+    const show = cat === 'all' || cell.dataset.cat === cat;
+    cell.style.display = show ? '' : 'none';
+  });
+}
+
+// ── Lightbox ──
+const cells = [
+  { emoji: '🎂', label: 'Tarta de cumpleaños', color: 'linear-gradient(135deg,#fde8b0,#f5c060,#e8a030)' },
+  { emoji: '☕', label: 'Arte latte', color: 'linear-gradient(135deg,#e8c8a0,#c89060,#a86030)' },
+  { emoji: '🍰', label: 'Roscón de Reyes', color: 'linear-gradient(135deg,#fdd0a0,#f5a060,#d07030)' },
+  { emoji: '🥐', label: 'Cachitos venezolanos', color: 'linear-gradient(135deg,#fde0e0,#f0a0a0,#d07070)' },
+  { emoji: '🧋', label: 'Iced latte de verano', color: 'linear-gradient(135deg,#d0e8f0,#90b8d0,#507090)' },
+  { emoji: '🎉', label: 'San Valentín', color: 'linear-gradient(135deg,#fdd0e8,#f090b0,#d06080)' },
+  { emoji: '🍞', label: 'Croissant artesanal', color: 'linear-gradient(135deg,#f0e8c0,#d0b870,#a08030)' },
+  { emoji: '🍫', label: 'Mocaccino vegetal', color: 'linear-gradient(135deg,#e8d0b0,#c09060,#906030)' },
+  { emoji: '🧁', label: 'Cupcakes', color: 'linear-gradient(135deg,#e0d0f0,#b090d0,#806090)' },
+  { emoji: '🎂', label: '4to Aniversario', color: 'linear-gradient(135deg,#f0e0d0,#d0a080,#a06040)' },
+];
+let currentIdx = 0;
+
+function openLightbox(i) {
+  currentIdx = i;
+  updateLightbox();
+  document.getElementById('lightbox').classList.add('open');
+  document.addEventListener('keydown', handleKey);
+}
+function closeLightbox(e) {
+  if (e && e.target !== document.getElementById('lightbox') && !e.target.classList.contains('lb-close')) return;
+  document.getElementById('lightbox').classList.remove('open');
+  document.removeEventListener('keydown', handleKey);
+}
+function lbNav(dir, e) {
+  e && e.stopPropagation();
+  currentIdx = (currentIdx + dir + cells.length) % cells.length;
+  updateLightbox();
+}
+function updateLightbox() {
+  const c = cells[currentIdx];
+  const img = document.getElementById('lbImg');
+  img.textContent = c.emoji;
+  img.style.background = c.color;
+  document.getElementById('lbCaption').textContent = c.label;
+  document.getElementById('lbCounter').textContent = `${currentIdx + 1} / ${cells.length}`;
+}
+function handleKey(e) {
+  if (e.key === 'Escape') closeLightbox({target: document.getElementById('lightbox')});
+  if (e.key === 'ArrowRight') lbNav(1);
+  if (e.key === 'ArrowLeft')  lbNav(-1);
+}
+
+// ── Counters ──
+let animating = false;
+function resetCounters() {
+  animating = false;
+  document.getElementById('cnt-years').textContent = '0';
+  document.getElementById('cnt-followers').innerHTML = '0<span class="stat-suffix">K</span>';
+  document.getElementById('cnt-posts').textContent = '0';
+  document.getElementById('cnt-rating').innerHTML = '0.0<span class="stat-suffix">★</span>';
+}
+function triggerCounters() {
+  if (animating) return;
+  animating = true;
+  animateNum('cnt-years',     4,   1800, 0, '');
+  animateNum('cnt-followers', 3,   2000, 0, 'K');
+  animateNum('cnt-posts',     166, 1800, 0, '');
+  animateNum('cnt-rating',    4.8, 1600, 1, '★');
+}
+function animateNum(id, target, dur, dec, suffix) {
+  const el = document.getElementById(id);
+  const start = performance.now();
+  const tick = (now) => {
+    const p = Math.min((now - start) / dur, 1);
+    const ease = 1 - Math.pow(1 - p, 3);
+    const val = (ease * target).toFixed(dec);
+    el.innerHTML = val + (suffix ? `<span class="stat-suffix">${suffix}</span>` : '');
+    if (p < 1) requestAnimationFrame(tick);
+  };
+  requestAnimationFrame(tick);
+}
+</script>
+</body>
+</html>

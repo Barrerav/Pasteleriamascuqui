@@ -1,0 +1,769 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hero + Productos — +Cuqui</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --cream:      #fdf6f0;
+  --cream-mid:  #f5ede4;
+  --cream-dark: #e8ddd4;
+  --rose:       #c8706a;
+  --rose-dark:  #a85a55;
+  --caramel:    #f5a845;
+  --pink:       #ef83a7;
+  --ink:        #2d1f1a;
+  --ink-soft:   #7a5c55;
+}
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: #ede6df;
+  color: var(--ink);
+}
+
+/* ── TABS ── */
+.tabs {
+  display: flex; gap: 2px;
+  background: #e0d9d0;
+  padding: 14px 28px 0;
+  position: sticky; top: 0; z-index: 200;
+  align-items: flex-end;
+}
+.tab {
+  padding: 9px 20px; border-radius: 8px 8px 0 0;
+  font-size: 13px; font-weight: 500; cursor: pointer;
+  color: #7a6a62; background: #d4cdc5; transition: all 0.2s;
+  user-select: none;
+}
+.tab.active { background: var(--cream); color: var(--ink); font-weight: 600; padding-bottom: 11px; }
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* ══════════════════════════════
+   PREVIEW
+══════════════════════════════ */
+#panel-preview { background: var(--cream); }
+
+/* NAVBAR */
+.navbar {
+  position: absolute; top: 0; left: 0; right: 0; z-index: 10;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 48px;
+}
+.navbar-logo { height: 56px; width: auto; display: block; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3)); }
+.nav-links { display: flex; gap: 28px; align-items: center; }
+.nav-links a {
+  font-size: 14px; color: rgba(255,255,255,0.88);
+  text-decoration: none; font-weight: 500;
+}
+.nav-links a:hover { color: white; }
+.nav-cta {
+  background: var(--rose); color: white !important;
+  padding: 10px 20px; border-radius: 100px;
+  font-weight: 600 !important; font-size: 13px !important;
+}
+
+/* HERO */
+.hero {
+  position: relative; height: 100vh;
+  min-height: 600px; max-height: 860px;
+  overflow: hidden; display: flex;
+  align-items: center; justify-content: center;
+}
+.video-sim {
+  position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse at 20% 60%, rgba(200,112,106,0.75) 0%, transparent 50%),
+    radial-gradient(ellipse at 75% 30%, rgba(245,168,69,0.6)   0%, transparent 45%),
+    radial-gradient(ellipse at 50% 85%, rgba(160,80,60,0.85)   0%, transparent 55%),
+    linear-gradient(160deg, #3a1a14 0%, #1a0c08 100%);
+  animation: vFloat 10s ease-in-out infinite alternate;
+}
+@keyframes vFloat {
+  0%   { filter: brightness(1) saturate(1); }
+  100% { filter: brightness(1.1) saturate(1.12); }
+}
+.bokeh {
+  position: absolute; inset: 0; overflow: hidden; pointer-events: none;
+}
+.bokeh::before, .bokeh::after {
+  content: ''; position: absolute; border-radius: 50%;
+  filter: blur(50px); opacity: 0.25;
+  animation: bkMove 12s ease-in-out infinite alternate;
+}
+.bokeh::before { width:320px; height:320px; background:#f5a845; top:8%; left:62%; }
+.bokeh::after  { width:220px; height:220px; background:#ef83a7; bottom:18%; right:18%; animation-delay:-5s; }
+@keyframes bkMove { to { transform: translate(40px,-30px) scale(1.2); } }
+.hero-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, rgba(20,8,5,0.18) 0%, rgba(20,8,5,0.48) 55%, rgba(20,8,5,0.65) 100%);
+}
+.video-badge {
+  position: absolute; top: 90px; right: 32px; z-index: 5;
+  background: rgba(0,0,0,0.4); backdrop-filter: blur(8px);
+  border: 1px solid rgba(255,255,255,0.12); border-radius: 100px;
+  padding: 5px 13px; display: flex; align-items: center; gap: 7px;
+  font-size: 11px; color: rgba(255,255,255,0.55); letter-spacing: 0.07em;
+}
+.rec-dot { width:7px; height:7px; border-radius:50%; background:#ef4444; animation: rblink 1.8s ease-in-out infinite; }
+@keyframes rblink { 0%,100%{opacity:1} 50%{opacity:0.2} }
+
+.hero-content { position: relative; z-index: 5; text-align: center; color: white; padding: 0 24px; max-width: 700px; }
+.hero-eyebrow {
+  font-size: 11px; font-weight: 600; letter-spacing: 0.22em; text-transform: uppercase;
+  color: var(--caramel); margin-bottom: 20px;
+  display: flex; align-items: center; justify-content: center; gap: 12px;
+}
+.hero-eyebrow::before, .hero-eyebrow::after {
+  content: ''; display: block; width: 30px; height: 1px; background: rgba(245,168,69,0.4);
+}
+.hero-headline {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(42px, 6vw, 72px); font-weight: 400;
+  line-height: 1.08; margin-bottom: 18px;
+  text-shadow: 0 2px 32px rgba(0,0,0,0.35);
+}
+.hero-headline em { font-style: italic; color: var(--caramel); }
+.hero-sub { font-size: 17px; line-height: 1.6; color: rgba(255,255,255,0.7); margin-bottom: 36px; font-weight: 300; }
+.hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+.btn-primary-hero {
+  background: var(--rose); color: white; padding: 14px 28px;
+  border-radius: 100px; font-size: 15px; font-weight: 600;
+  text-decoration: none; display: flex; align-items: center; gap: 8px;
+  box-shadow: 0 4px 20px rgba(200,112,106,0.45);
+  transition: all 0.2s; cursor: default;
+}
+.btn-secondary-hero {
+  background: rgba(255,255,255,0.12); color: white;
+  padding: 14px 28px; border-radius: 100px; font-size: 15px; font-weight: 500;
+  text-decoration: none; border: 1.5px solid rgba(255,255,255,0.28);
+  backdrop-filter: blur(8px); display: flex; align-items: center; gap: 8px;
+  cursor: default;
+}
+.scroll-hint {
+  position: absolute; bottom: 26px; left: 50%; transform: translateX(-50%); z-index: 5;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+  color: rgba(255,255,255,0.4); font-size: 10px; letter-spacing: 0.15em; text-transform: uppercase;
+}
+.scroll-line {
+  width: 1px; height: 36px;
+  background: linear-gradient(to bottom, rgba(255,255,255,0.4), transparent);
+  animation: sdrop 2s ease-in-out infinite;
+}
+@keyframes sdrop {
+  0%   { opacity:0; transform:scaleY(0); transform-origin:top; }
+  50%  { opacity:1; transform:scaleY(1); }
+  100% { opacity:0; transform:translateY(10px); }
+}
+
+/* INFO BAR */
+.info-bar {
+  background: white; border-bottom: 1px solid var(--cream-dark);
+  display: flex; justify-content: center; gap: 48px; padding: 14px 48px;
+}
+.info-item { display: flex; align-items: center; gap: 9px; font-size: 13px; color: var(--ink-soft); }
+.info-icon { color: var(--rose); display:flex; }
+.info-item strong { color: var(--ink); }
+
+/* ══════════════════════════════
+   PRODUCTOS
+══════════════════════════════ */
+.products-section { background: var(--cream); padding: 80px 48px; }
+.section-eyebrow {
+  text-align: center; font-size: 10px; font-weight: 700;
+  letter-spacing: 0.18em; text-transform: uppercase; color: var(--rose);
+  margin-bottom: 10px;
+}
+.section-title {
+  font-family: 'Playfair Display', serif; font-size: 38px;
+  font-weight: 400; text-align: center; margin-bottom: 12px; color: var(--ink);
+}
+.section-sub { text-align: center; font-size: 15px; color: var(--ink-soft); margin-bottom: 56px; }
+
+.products-grid {
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 24px;
+  max-width: 1200px; margin: 0 auto;
+}
+
+.product-card {
+  background: white; border-radius: 20px; overflow: hidden;
+  box-shadow: 0 2px 16px rgba(45,31,26,0.07);
+  transition: transform 0.25s, box-shadow 0.25s; cursor: default;
+  display: flex; flex-direction: column;
+}
+.product-card:hover { transform: translateY(-6px); box-shadow: 0 8px 32px rgba(45,31,26,0.13); }
+
+/* Photo area */
+.product-photo {
+  width: 100%; aspect-ratio: 4/3; overflow: hidden;
+  position: relative;
+}
+.product-photo-inner {
+  width: 100%; height: 100%;
+  transition: transform 0.4s ease;
+}
+.product-card:hover .product-photo-inner { transform: scale(1.07); }
+
+/* Placeholder photos styled with brand colors + food SVG pattern */
+.photo-cafeteria  { background: linear-gradient(135deg, #f5d5c0 0%, #e8a090 50%, #c87870 100%); }
+.photo-pasteleria { background: linear-gradient(135deg, #fde8b0 0%, #f5c060 50%, #e8a030 100%); }
+.photo-desayunos  { background: linear-gradient(135deg, #fde0e8 0%, #f0a0b8 50%, #d87090 100%); }
+.photo-pedidos    { background: linear-gradient(135deg, #e0d8f0 0%, #b8a8d8 50%, #9080b8 100%); }
+
+.photo-label {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 8px;
+}
+.photo-icon { font-size: 36px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15)); }
+.photo-placeholder-text {
+  font-size: 10px; font-weight: 600; letter-spacing: 0.12em;
+  text-transform: uppercase; color: rgba(255,255,255,0.7);
+  background: rgba(0,0,0,0.2); padding: 3px 10px; border-radius: 100px;
+}
+.photo-swap-hint {
+  position: absolute; inset: 0; background: rgba(45,31,26,0.55);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center; gap: 6px;
+  opacity: 0; transition: opacity 0.25s;
+}
+.product-card:hover .photo-swap-hint { opacity: 1; }
+.swap-icon { font-size: 22px; }
+.swap-text { font-size: 11px; color: rgba(255,255,255,0.85); font-weight: 500; letter-spacing: 0.05em; }
+
+/* Card body */
+.product-body { padding: 22px 22px 20px; flex: 1; display: flex; flex-direction: column; }
+.product-cat {
+  font-size: 10px; font-weight: 700; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--rose); margin-bottom: 6px;
+}
+.product-name {
+  font-family: 'Playfair Display', serif; font-size: 20px;
+  font-weight: 700; color: var(--ink); margin-bottom: 10px; line-height: 1.2;
+}
+.product-desc { font-size: 13px; color: var(--ink-soft); line-height: 1.65; flex: 1; margin-bottom: 18px; }
+.product-footer { display: flex; align-items: center; justify-content: space-between; }
+.product-price {
+  background: var(--cream-mid); color: var(--rose);
+  font-size: 12px; font-weight: 700;
+  padding: 4px 10px; border-radius: 100px;
+}
+.product-cta {
+  font-size: 13px; font-weight: 600; color: var(--rose);
+  display: flex; align-items: center; gap: 4px; cursor: default;
+  transition: gap 0.2s;
+}
+.product-card:hover .product-cta { gap: 7px; }
+
+/* CTA bottom */
+.products-cta-wrap { text-align: center; margin-top: 48px; }
+.btn-outline-rose {
+  display: inline-flex; align-items: center; gap: 8px;
+  border: 2px solid var(--rose); color: var(--rose);
+  padding: 14px 32px; border-radius: 100px;
+  font-size: 15px; font-weight: 600; text-decoration: none; cursor: default;
+  transition: all 0.2s;
+}
+.btn-outline-rose:hover { background: var(--rose); color: white; }
+
+/* ══════════════════════════════
+   CODE TAB
+══════════════════════════════ */
+#panel-code { background: oklch(14% 0.01 260); }
+.code-header {
+  background: oklch(18% 0.01 260); padding: 18px 32px;
+  border-bottom: 1px solid rgba(255,255,255,0.06);
+  display: flex; align-items: center; justify-content: space-between;
+}
+.file-tabs { display: flex; gap: 2px; }
+.ftab {
+  font-family: 'Courier New', monospace; font-size: 12px;
+  padding: 7px 14px; border-radius: 5px 5px 0 0;
+  cursor: pointer; color: rgba(255,255,255,0.4); transition: all 0.2s; user-select: none;
+}
+.ftab.active { background: oklch(14% 0.01 260); color: rgba(255,255,255,0.88); }
+.code-hint { font-size: 11px; color: rgba(255,255,255,0.28); }
+.code-body { padding: 30px 40px; overflow-x: auto; }
+pre { font-family: 'Courier New', monospace; font-size: 13px; line-height: 2; color: oklch(82% 0.01 60); }
+.ck { color: oklch(68% 0.18 280); }
+.cs { color: oklch(72% 0.15 140); }
+.cc { color: oklch(50% 0.01 60); font-style: italic; }
+.cp { color: oklch(70% 0.15 50); }
+.ct { color: oklch(65% 0.14 200); }
+.chl { background: oklch(22% 0.04 60 / 0.5); display: block; margin: 0 -40px; padding: 0 40px; border-left: 2px solid oklch(68% 0.14 55); }
+.sub-panel { display: none; }
+.sub-panel.active { display: block; }
+.note {
+  background: oklch(20% 0.03 50 / 0.7); border: 1px solid oklch(65% 0.13 55 / 0.3);
+  border-radius: 8px; padding: 13px 17px; margin: 0 0 20px;
+  font-size: 12px; color: oklch(78% 0.08 55);
+  display: flex; align-items: flex-start; gap: 10px;
+}
+.note-icon { font-size: 14px; flex-shrink: 0; }
+code-i { font-family:'Courier New',monospace; font-size:11px; background:rgba(255,255,255,0.1); padding:2px 6px; border-radius:4px; }
+
+/* ══════════════════════════════
+   INSTALL TAB
+══════════════════════════════ */
+#panel-install { background: var(--cream); }
+.install-inner { max-width: 760px; margin: 0 auto; padding: 48px 40px; }
+.install-inner h3 { font-family:'Playfair Display',serif; font-size:26px; font-weight:400; margin-bottom:32px; }
+.step { display:flex; gap:18px; margin-bottom:28px; padding-bottom:28px; border-bottom:1px dashed var(--cream-dark); }
+.step:last-child { border-bottom:none; }
+.step-num { width:34px; height:34px; border-radius:50%; background:var(--rose); color:white; font-weight:700; font-size:13px; display:flex; align-items:center; justify-content:center; flex-shrink:0; margin-top:2px; }
+.step-content h4 { font-size:15px; font-weight:600; margin-bottom:7px; }
+.step-content p { font-size:13.5px; color:var(--ink-soft); line-height:1.7; }
+.step-content code { font-family:'Courier New',monospace; font-size:12px; background:var(--cream-dark); padding:2px 6px; border-radius:4px; }
+
+</style>
+</head>
+<body>
+
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('preview')">👁 Vista previa</div>
+  <div class="tab" onclick="switchTab('code')">💻 Código Next.js</div>
+  <div class="tab" onclick="switchTab('install')">📋 Guía de implementación</div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- PREVIEW -->
+<!-- ══════════════════════════════════════════════════ -->
+<div id="panel-preview" class="tab-content active">
+
+  <div style="position:relative;">
+
+    <!-- NAVBAR con logo real -->
+    <nav class="navbar">
+      <img src="assets/logo.png" alt="+Cuqui Pastelería Creativa" class="navbar-logo">
+      <div class="nav-links">
+        <a href="#">Nosotros</a>
+        <a href="#">Productos</a>
+        <a href="#">Carta</a>
+        <a href="#">Galería</a>
+        <a href="#">Contacto</a>
+        <a href="#" class="nav-cta">Pedir ahora</a>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <div class="hero">
+      <div class="video-sim"></div>
+      <div class="bokeh"></div>
+      <div class="hero-overlay"></div>
+
+      <div class="video-badge">
+        <div class="rec-dot"></div>
+        /videos/hero.mp4 · autoplay · muted · loop
+      </div>
+
+      <div class="hero-content">
+        <div class="hero-eyebrow">Cafetería · Pastelería · Ciudad Real</div>
+        <div class="hero-headline">Donde todo se hace<br><em>con amor</em></div>
+        <p class="hero-sub">Pastelería artesanal en el corazón de Ciudad Real.<br>Tartas personalizadas, desayunos y café de especialidad.</p>
+        <div class="hero-btns">
+          <div class="btn-primary-hero">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
+            Hacer un pedido
+          </div>
+          <div class="btn-secondary-hero">
+            Ver carta
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+      </div>
+
+      <div class="scroll-hint">
+        <div class="scroll-line"></div>
+        Descubrir
+      </div>
+    </div>
+  </div>
+
+  <!-- INFO BAR -->
+  <div class="info-bar">
+    <div class="info-item">
+      <div class="info-icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      </div>
+      <span><strong>L–V:</strong> 8:30–20:30 &nbsp;·&nbsp; <strong>S:</strong> 9:00–14:00 &nbsp;·&nbsp; Domingos cerrado</span>
+    </div>
+    <div class="info-item">
+      <div class="info-icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+      </div>
+      <span><strong>Calle Tinte, 17 Bajo</strong> · Ciudad Real</span>
+    </div>
+    <div class="info-item">
+      <div class="info-icon">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      </div>
+      <span><strong>4.8★</strong> en Google Maps</span>
+    </div>
+  </div>
+
+  <!-- ── PRODUCTOS ── -->
+  <section class="products-section">
+    <div class="section-eyebrow">Lo que ofrecemos</div>
+    <h2 class="section-title">Nuestros productos</h2>
+    <p class="section-sub">Todo elaborado artesanalmente en nuestro obrador. Consulta disponibilidad y precios por WhatsApp.</p>
+
+    <div class="products-grid">
+
+      <!-- Cafetería -->
+      <div class="product-card">
+        <div class="product-photo">
+          <div class="product-photo-inner photo-cafeteria">
+            <div class="photo-label">
+              <div class="photo-icon">☕</div>
+              <div class="photo-placeholder-text">foto latte art</div>
+            </div>
+          </div>
+          <div class="photo-swap-hint">
+            <div class="swap-icon">🔄</div>
+            <div class="swap-text">productPhotos.cafeteria</div>
+          </div>
+        </div>
+        <div class="product-body">
+          <div class="product-cat">Cafetería</div>
+          <div class="product-name">Café & bebidas</div>
+          <p class="product-desc">Café de especialidad, iced lattes de temporada, bebidas vegetales y arte latte hecho a mano.</p>
+          <div class="product-footer">
+            <div class="product-price">Desde 1,50 €</div>
+            <div class="product-cta">Consultar <span>→</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pastelería -->
+      <div class="product-card">
+        <div class="product-photo">
+          <div class="product-photo-inner photo-pasteleria">
+            <div class="photo-label">
+              <div class="photo-icon">🎂</div>
+              <div class="photo-placeholder-text">foto tarta cumple</div>
+            </div>
+          </div>
+          <div class="photo-swap-hint">
+            <div class="swap-icon">🔄</div>
+            <div class="swap-text">productPhotos.pasteleria</div>
+          </div>
+        </div>
+        <div class="product-body">
+          <div class="product-cat">Pastelería artesanal</div>
+          <div class="product-name">Tartas & dulces</div>
+          <p class="product-desc">Tartas personalizadas, tres leches, roscones de reyes y dulces de temporada elaborados desde cero.</p>
+          <div class="product-footer">
+            <div class="product-price">Desde 25 €</div>
+            <div class="product-cta">Consultar <span>→</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Desayunos -->
+      <div class="product-card">
+        <div class="product-photo">
+          <div class="product-photo-inner photo-desayunos">
+            <div class="photo-label">
+              <div class="photo-icon">🥐</div>
+              <div class="photo-placeholder-text">foto cachitos</div>
+            </div>
+          </div>
+          <div class="photo-swap-hint">
+            <div class="swap-icon">🔄</div>
+            <div class="swap-text">productPhotos.desayunos</div>
+          </div>
+        </div>
+        <div class="product-body">
+          <div class="product-cat">Desayunos</div>
+          <div class="product-name">Bollería & mañanas</div>
+          <p class="product-desc">Desayunos completos con tostadas, croissants, bollería fresca y los auténticos cachitos venezolanos.</p>
+          <div class="product-footer">
+            <div class="product-price">Desde 3,50 €</div>
+            <div class="product-cta">Consultar <span>→</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Pedidos -->
+      <div class="product-card">
+        <div class="product-photo">
+          <div class="product-photo-inner photo-pedidos">
+            <div class="photo-label">
+              <div class="photo-icon">🎁</div>
+              <div class="photo-placeholder-text">foto cupcakes</div>
+            </div>
+          </div>
+          <div class="photo-swap-hint">
+            <div class="swap-icon">🔄</div>
+            <div class="swap-text">productPhotos.pedidos</div>
+          </div>
+        </div>
+        <div class="product-body">
+          <div class="product-cat">Pedidos personalizados</div>
+          <div class="product-name">A tu medida</div>
+          <p class="product-desc">Tartas y dulces a medida para celebraciones. Consulta disponibilidad y precio por WhatsApp.</p>
+          <div class="product-footer">
+            <div class="product-price">Consultar</div>
+            <div class="product-cta">Consultar <span>→</span></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="products-cta-wrap">
+      <div class="btn-outline-rose">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/></svg>
+        Hacer un pedido
+      </div>
+    </div>
+  </section>
+
+  <div style="background:#ede6df; padding:14px 48px; text-align:center;">
+    <p style="font-size:13px; color:#7a6560;">
+      <strong>↑ Pasa el cursor sobre las tarjetas</strong> para ver dónde cambiar cada foto · Los placeholders de colores se reemplazan con las fotos reales en <code style="background:#ddd3c8; padding:1px 5px; border-radius:3px; font-size:12px;">src/data/photos.ts</code>
+    </p>
+  </div>
+
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- CÓDIGO -->
+<!-- ══════════════════════════════════════════════════ -->
+<div id="panel-code" class="tab-content">
+  <div class="code-header">
+    <div class="file-tabs">
+      <div class="ftab active" onclick="switchFile('hero')">HeroVideo.tsx</div>
+      <div class="ftab" onclick="switchFile('products')">ProductCard.tsx</div>
+      <div class="ftab" onclick="switchFile('photos')">photos.ts ⭐</div>
+    </div>
+    <div class="code-hint">Código listo para copiar</div>
+  </div>
+  <div class="code-body">
+
+    <!-- HeroVideo.tsx -->
+    <div id="code-hero" class="sub-panel active">
+      <div class="note"><div class="note-icon">📁</div>src/components/HeroVideo.tsx</div>
+<pre><span class="ck">import</span> <span class="cs">'./hero.css'</span>
+<span class="ck">import</span> <span class="cx">Link</span> <span class="ck">from</span> <span class="cs">'next/link'</span>
+<span class="ck">import</span> <span class="cx">Image</span> <span class="ck">from</span> <span class="cs">'next/image'</span>
+<span class="ck">import</span> <span class="cx">{ heroConfig }</span> <span class="ck">from</span> <span class="cs">'@/data/photos'</span>
+
+<span class="ck">export default function</span> <span class="cp">HeroVideo</span>() {
+  <span class="ck">const</span> { <span class="cp">videoSrc</span>, <span class="cp">posterSrc</span> } = heroConfig
+
+  <span class="ck">return</span> (
+    <span class="ct">&lt;section</span> <span class="cp">className</span>=<span class="cs">"hero-section"</span><span class="ct">&gt;</span>
+
+      <span class="cc">{"/* Vídeo de fondo — se reemplaza con el reel de la clienta */"}</span>
+<span class="chl">      <span class="ct">&lt;video</span></span>
+<span class="chl">        <span class="cp">className</span>=<span class="cs">"hero-video"</span></span>
+<span class="chl">        <span class="cp">src</span>=<span class="cs">{videoSrc}</span>            <span class="cc">// ← viene de photos.ts</span></span>
+<span class="chl">        <span class="cp">poster</span>=<span class="cs">{posterSrc}</span>         <span class="cc">// ← imagen mientras carga</span></span>
+<span class="chl">        <span class="cp">autoPlay</span> <span class="cp">muted</span> <span class="cp">loop</span> <span class="cp">playsInline</span></span>
+<span class="chl">      <span class="ct">/&gt;</span></span>
+
+      <span class="ct">&lt;div</span> <span class="cp">className</span>=<span class="cs">"hero-overlay"</span> <span class="ct">/&gt;</span>
+
+      <span class="ct">&lt;div</span> <span class="cp">className</span>=<span class="cs">"hero-content"</span><span class="ct">&gt;</span>
+        <span class="ct">&lt;p</span> <span class="cp">className</span>=<span class="cs">"hero-eyebrow"</span><span class="ct">&gt;</span>Cafetería · Pastelería · Ciudad Real<span class="ct">&lt;/p&gt;</span>
+        <span class="ct">&lt;h1</span> <span class="cp">className</span>=<span class="cs">"hero-headline"</span><span class="ct">&gt;</span>
+          Donde todo se hace&lt;br /&gt;<span class="ct">&lt;em&gt;</span>con amor<span class="ct">&lt;/em&gt;</span>
+        <span class="ct">&lt;/h1&gt;</span>
+        <span class="ct">&lt;p</span> <span class="cp">className</span>=<span class="cs">"hero-sub"</span><span class="ct">&gt;</span>
+          Pastelería artesanal en el corazón de Ciudad Real.
+        <span class="ct">&lt;/p&gt;</span>
+        <span class="ct">&lt;div</span> <span class="cp">className</span>=<span class="cs">"hero-btns"</span><span class="ct">&gt;</span>
+          <span class="ct">&lt;Link</span> <span class="cp">href</span>=<span class="cs">"https://wa.me/34641384941"</span> <span class="cp">className</span>=<span class="cs">"btn-hero-primary"</span><span class="ct">&gt;</span>
+            Hacer un pedido
+          <span class="ct">&lt;/Link&gt;</span>
+          <span class="ct">&lt;Link</span> <span class="cp">href</span>=<span class="cs">"#carta"</span> <span class="cp">className</span>=<span class="cs">"btn-hero-secondary"</span><span class="ct">&gt;</span>Ver carta<span class="ct">&lt;/Link&gt;</span>
+        <span class="ct">&lt;/div&gt;</span>
+      <span class="ct">&lt;/div&gt;</span>
+
+      <span class="ct">&lt;div</span> <span class="cp">className</span>=<span class="cs">"scroll-hint"</span><span class="ct">&gt;</span>
+        <span class="ct">&lt;div</span> <span class="cp">className</span>=<span class="cs">"scroll-line"</span> <span class="ct">/&gt;</span>
+        <span class="ct">&lt;span&gt;</span>Descubrir<span class="ct">&lt;/span&gt;</span>
+      <span class="ct">&lt;/div&gt;</span>
+
+    <span class="ct">&lt;/section&gt;</span>
+  )
+}</pre>
+    </div>
+
+    <!-- ProductCard.tsx -->
+    <div id="code-products" class="sub-panel">
+      <div class="note"><div class="note-icon">📁</div>src/components/ProductCard.tsx — reemplaza las tarjetas actuales</div>
+<pre><span class="ck">import</span> <span class="cx">Image</span> <span class="ck">from</span> <span class="cs">'next/image'</span>
+<span class="ck">import</span> <span class="cx">Link</span> <span class="ck">from</span> <span class="cs">'next/link'</span>
+<span class="ck">import</span> <span class="cs">'./product-card.css'</span>
+
+<span class="ck">interface</span> <span class="cp">Props</span> {
+  <span class="cp">category</span>: <span class="ck">string</span>
+  <span class="cp">title</span>:    <span class="ck">string</span>
+  <span class="cp">desc</span>:     <span class="ck">string</span>
+  <span class="cp">price</span>:    <span class="ck">string</span>
+<span class="chl">  <span class="cp">photo</span>:    <span class="ck">string</span>    <span class="cc">// ← viene de photos.ts</span></span>
+  <span class="cp">waText</span>:   <span class="ck">string</span>
+}
+
+<span class="ck">export default function</span> <span class="cp">ProductCard</span>({ <span class="cp">category</span>, <span class="cp">title</span>, <span class="cp">desc</span>, <span class="cp">price</span>, <span class="cp">photo</span>, <span class="cp">waText</span> }: Props) {
+  <span class="ck">return</span> (
+    <span class="ct">&lt;article</span> <span class="cp">className</span>=<span class="cs">"product-card"</span><span class="ct">&gt;</span>
+
+      <span class="ct">&lt;div</span> <span class="cp">className</span>=<span class="cs">"product-photo"</span><span class="ct">&gt;</span>
+<span class="chl">        <span class="ct">&lt;Image</span></span>
+<span class="chl">          <span class="cp">src</span>=<span class="cs">{photo}</span>          <span class="cc">// ← la foto del archivo photos.ts</span></span>
+<span class="chl">          <span class="cp">alt</span>=<span class="cs">{title}</span></span>
+<span class="chl">          <span class="cp">fill</span></span>
+<span class="chl">          <span class="cp">className</span>=<span class="cs">"product-img"</span></span>
+<span class="chl">          <span class="cp">sizes</span>=<span class="cs">"(max-width:768px) 100vw, 25vw"</span></span>
+<span class="chl">        <span class="ct">/&gt;</span></span>
+      <span class="ct">&lt;/div&gt;</span>
+
+      <span class="ct">&lt;div</span> <span class="cp">className</span>=<span class="cs">"product-body"</span><span class="ct">&gt;</span>
+        <span class="ct">&lt;p</span>  <span class="cp">className</span>=<span class="cs">"product-cat"</span><span class="ct">&gt;</span><span class="cs">{category}</span><span class="ct">&lt;/p&gt;</span>
+        <span class="ct">&lt;h3</span> <span class="cp">className</span>=<span class="cs">"product-name"</span><span class="ct">&gt;</span><span class="cs">{title}</span><span class="ct">&lt;/h3&gt;</span>
+        <span class="ct">&lt;p</span>  <span class="cp">className</span>=<span class="cs">"product-desc"</span><span class="ct">&gt;</span><span class="cs">{desc}</span><span class="ct">&lt;/p&gt;</span>
+        <span class="ct">&lt;div</span> <span class="cp">className</span>=<span class="cs">"product-footer"</span><span class="ct">&gt;</span>
+          <span class="ct">&lt;span</span> <span class="cp">className</span>=<span class="cs">"product-price"</span><span class="ct">&gt;</span><span class="cs">{price}</span><span class="ct">&lt;/span&gt;</span>
+          <span class="ct">&lt;Link</span> <span class="cp">href</span>=<span class="cs">{`https://wa.me/34641384941?text=${waText}`}</span>
+                <span class="cp">className</span>=<span class="cs">"product-cta"</span><span class="ct">&gt;</span>
+            Consultar →
+          <span class="ct">&lt;/Link&gt;</span>
+        <span class="ct">&lt;/div&gt;</span>
+      <span class="ct">&lt;/div&gt;</span>
+
+    <span class="ct">&lt;/article&gt;</span>
+  )
+}</pre>
+    </div>
+
+    <!-- photos.ts -->
+    <div id="code-photos" class="sub-panel">
+      <div class="note"><div class="note-icon">⭐</div><strong>Único archivo que editas</strong> cuando la clienta quiera cambiar algo · src/data/photos.ts</div>
+<pre><span class="cc">// src/data/photos.ts</span>
+<span class="cc">// ════════════════════════════════════════════════════</span>
+<span class="cc">// Cambia fotos y vídeos SOLO desde aquí</span>
+<span class="cc">// ════════════════════════════════════════════════════</span>
+
+<span class="cc">// ── HERO ─────────────────────────────────────────────</span>
+<span class="ck">export const</span> <span class="cp">heroConfig</span> = {
+<span class="chl">  <span class="cp">videoSrc</span>:  <span class="cs">"/videos/hero.mp4"</span>,       <span class="cc">// ← nuevo reel aquí</span></span>
+<span class="chl">  <span class="cp">posterSrc</span>: <span class="cs">"/images/hero-poster.jpg"</span>,  <span class="cc">// ← fotograma portada</span></span>
+}
+
+<span class="cc">// ── TARJETAS DE PRODUCTO ─────────────────────────────</span>
+<span class="ck">export const</span> <span class="cp">productPhotos</span> = {
+<span class="chl">  <span class="cp">cafeteria</span>:  <span class="cs">"/instagram/post-4.jpg"</span>,   <span class="cc">// arte latte</span></span>
+<span class="chl">  <span class="cp">pasteleria</span>: <span class="cs">"/instagram/post-1.jpg"</span>,   <span class="cc">// tarta cumpleaños</span></span>
+<span class="chl">  <span class="cp">desayunos</span>:  <span class="cs">"/instagram/post-6.jpg"</span>,   <span class="cc">// cachitos</span></span>
+<span class="chl">  <span class="cp">pedidos</span>:    <span class="cs">"/instagram/post-3.jpg"</span>,   <span class="cc">// aniversario</span></span>
+}
+
+<span class="cc">// ── SECCIÓN "NUESTRA HISTORIA" (3 fotos) ─────────────</span>
+<span class="ck">export const</span> <span class="cp">historyPhotos</span> = [
+  { <span class="cp">src</span>: <span class="cs">"/instagram/post-2.jpg"</span>,  <span class="cp">alt</span>: <span class="cs">"Desayuno artesanal"</span> },
+  { <span class="cp">src</span>: <span class="cs">"/instagram/post-5.jpg"</span>,  <span class="cp">alt</span>: <span class="cs">"Mocaccino vegetal"</span>  },
+  { <span class="cp">src</span>: <span class="cs">"/instagram/post-9.jpg"</span>,  <span class="cp">alt</span>: <span class="cs">"Roscón de Reyes"</span>    },
+  <span class="cc">// ↑ Quita la de Nintendo Switch y pon estas</span>
+]
+
+<span class="cc">// ── GALERÍA (añade/quita fotos libremente) ────────────</span>
+<span class="ck">export const</span> <span class="cp">galleryPhotos</span> = [
+  { <span class="cp">src</span>: <span class="cs">"/instagram/post-1.jpg"</span>,  <span class="cp">alt</span>: <span class="cs">"Iced lattes"</span>,       <span class="cp">cat</span>: <span class="cs">"cafeteria"</span>  },
+  { <span class="cp">src</span>: <span class="cs">"/instagram/post-2.jpg"</span>,  <span class="cp">alt</span>: <span class="cs">"Desayuno artesanal"</span>, <span class="cp">cat</span>: <span class="cs">"desayunos"</span>  },
+  { <span class="cp">src</span>: <span class="cs">"/instagram/post-3.jpg"</span>,  <span class="cp">alt</span>: <span class="cs">"4to Aniversario"</span>,   <span class="cp">cat</span>: <span class="cs">"eventos"</span>    },
+  { <span class="cp">src</span>: <span class="cs">"/instagram/post-4.jpg"</span>,  <span class="cp">alt</span>: <span class="cs">"Arte latte"</span>,        <span class="cp">cat</span>: <span class="cs">"cafeteria"</span>  },
+  { <span class="cp">src</span>: <span class="cs">"/instagram/post-5.jpg"</span>,  <span class="cp">alt</span>: <span class="cs">"Mocaccino vegetal"</span>,  <span class="cp">cat</span>: <span class="cs">"cafeteria"</span>  },
+  { <span class="cp">src</span>: <span class="cs">"/instagram/post-6.jpg"</span>,  <span class="cp">alt</span>: <span class="cs">"Cachitos"</span>,          <span class="cp">cat</span>: <span class="cs">"desayunos"</span>  },
+  { <span class="cp">src</span>: <span class="cs">"/instagram/post-7.jpg"</span>,  <span class="cp">alt</span>: <span class="cs">"San Valentín"</span>,      <span class="cp">cat</span>: <span class="cs">"eventos"</span>    },
+  { <span class="cp">src</span>: <span class="cs">"/instagram/post-9.jpg"</span>,  <span class="cp">alt</span>: <span class="cs">"Roscones de Reyes"</span>, <span class="cp">cat</span>: <span class="cs">"pasteleria"</span> },
+  <span class="cc">// Para añadir una foto nueva: copia una línea y cambia src y alt</span>
+]</pre>
+    </div>
+
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════════════════ -->
+<!-- INSTRUCCIONES -->
+<!-- ══════════════════════════════════════════════════ -->
+<div id="panel-install" class="tab-content">
+  <div class="install-inner">
+    <div style="font-size:10px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--rose);margin-bottom:8px;">Guía de implementación</div>
+    <h3>Cómo implementar el hero con vídeo y las tarjetas</h3>
+
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-content">
+        <h4>Crea el archivo de configuración central</h4>
+        <p>Crea <code>src/data/photos.ts</code> con el contenido de la pestaña <strong>photos.ts ⭐</strong>. Este es el único archivo que tocarás cuando la clienta quiera cambiar algo.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-content">
+        <h4>Añade el componente HeroVideo</h4>
+        <p>Crea <code>src/components/HeroVideo.tsx</code> y <code>src/components/hero.css</code>. En <code>page.tsx</code>, reemplaza toda la sección del widget de Instagram por <code>&lt;HeroVideo /&gt;</code>.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-content">
+        <h4>Actualiza las tarjetas de producto</h4>
+        <p>Actualiza el componente de tarjetas para que acepte una prop <code>photo</code> y renderice un <code>&lt;Image&gt;</code> de Next.js. Las fotos vienen de <code>productPhotos</code> en <code>photos.ts</code>.</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-content">
+        <h4>Coloca el vídeo comprimido en public/videos/</h4>
+        <p>Cuando la clienta te mande un reel, comprímelo con ffmpeg a menos de 8MB y guárdalo como <code>public/videos/hero.mp4</code>. Actualiza la ruta en <code>photos.ts</code> si usas otro nombre.</p>
+        <p style="margin-top:8px;background:#ede6df;border-radius:8px;padding:10px 14px;font-family:'Courier New',monospace;font-size:12px;">ffmpeg -i reel-original.mp4 -vcodec h264 -crf 28 -vf "scale=1920:-2" -an public/videos/hero.mp4</p>
+      </div>
+    </div>
+
+    <div class="step">
+      <div class="step-num">5</div>
+      <div class="step-content">
+        <h4>Cambia la foto de Nintendo Switch</h4>
+        <p>En <code>photos.ts</code>, la sección <code>historyPhotos</code> ya tiene las 3 fotos correctas. Solo asegúrate de que en el componente <code>SobreNosotros</code> estés usando ese array en lugar de los paths hardcodeados.</p>
+      </div>
+    </div>
+
+    <div style="background:#fdf0ec; border-radius:12px; padding:18px 22px; border-left:4px solid var(--rose); margin-top:8px;">
+      <p style="font-size:14px; font-weight:600; margin-bottom:6px; color:var(--ink);">🔄 Flujo para cambiar el vídeo en el futuro</p>
+      <p style="font-size:13px; color:var(--ink-soft); line-height:1.7;">
+        La clienta te manda el reel → tú lo comprimes → lo subes a <code>public/videos/</code> → cambias <strong>1 línea</strong> en <code>photos.ts</code> → commit + deploy. Sin tocar componentes.
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(name) {
+  document.querySelectorAll('.tab').forEach((t,i) => {
+    t.classList.toggle('active', ['preview','code','install'][i] === name);
+  });
+  document.querySelectorAll('.tab-content').forEach(p => p.classList.remove('active'));
+  document.getElementById('panel-' + name).classList.add('active');
+}
+function switchFile(name) {
+  document.querySelectorAll('.ftab').forEach((t,i) => {
+    t.classList.toggle('active', ['hero','products','photos'][i] === name);
+  });
+  document.querySelectorAll('.sub-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('code-' + name).classList.add('active');
+}
+</script>
+</body>
+</html>
