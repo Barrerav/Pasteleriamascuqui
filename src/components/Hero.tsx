@@ -30,7 +30,7 @@ export default function Hero() {
 
   return (
     <>
-      <section className="relative min-h-[78vh] flex items-center justify-center overflow-hidden pt-16">
+      <section className="relative min-h-[78vh] flex items-center justify-center overflow-hidden pt-32 md:pt-48">
         {/* Video background */}
         <video
           src={heroConfig.videoSrc}
@@ -56,11 +56,11 @@ export default function Hero() {
 
           {/* Eyebrow */}
           <div className="flex items-center gap-3">
-            <span className="block w-8 h-px bg-gold/50" />
-            <span className="text-gold font-semibold text-xs tracking-[0.22em] uppercase">
+            <span className="block w-8 h-px bg-white/60" />
+            <span className="text-white font-semibold text-xs tracking-[0.22em] uppercase drop-shadow">
               Cafetería · Pastelería · Ciudad Real
             </span>
-            <span className="block w-8 h-px bg-gold/50" />
+            <span className="block w-8 h-px bg-white/60" />
           </div>
 
           {/* Headline */}

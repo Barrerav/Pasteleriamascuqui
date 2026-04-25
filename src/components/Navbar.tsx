@@ -72,14 +72,14 @@ export default function Navbar() {
           scrolled ? 'bg-cream/90 backdrop-blur-md shadow-sm' : 'bg-transparent'
         }`}
       >
-        <div className="max-w-6xl mx-auto px-6 h-28 md:h-40 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-6 h-32 md:h-48 flex items-center justify-between">
           <a href="#" className="flex items-center">
-            <Image 
+            <Image
               src={logoSrc}
-              alt="Más Cuqui — Cafetería y Pastelería en Ciudad Real" 
-              width={500} 
-              height={200} 
-              className="h-24 md:h-36 w-auto object-contain drop-shadow-md"
+              alt="Más Cuqui — Cafetería y Pastelería en Ciudad Real"
+              width={500}
+              height={200}
+              className="h-28 md:h-44 w-auto object-contain drop-shadow-md"
               priority
             />
           </a>
@@ -93,7 +93,9 @@ export default function Navbar() {
                 className={`text-sm font-medium transition-colors ${
                   activeSection === l.href
                     ? 'text-rose'
-                    : 'text-brown hover:text-rose'
+                    : scrolled
+                      ? 'text-brown hover:text-rose'
+                      : 'text-white/90 hover:text-gold'
                 }`}
               >
                 {l.label}

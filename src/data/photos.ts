@@ -31,10 +31,13 @@ export const heroConfig = {
 //   [0] → foto grande (ocupa todo el ancho del collage)
 //   [1] → foto pequeña izquierda
 //   [2] → foto pequeña derecha
+//
+// Coloca las fotos en: public/historia/
+// Nombres de archivo: historia-1.jpg, historia-2.jpg, historia-3.jpg
 export const historyPhotos = [
-  { src: '/instagram/post-4.jpg', alt: 'Arte latte en Más Cuqui' },
-  { src: '/instagram/post-2.jpg', alt: 'Desayuno artesanal' },
-  { src: '/instagram/post-5.jpg', alt: 'Mocaccino vegetal' },
+  { src: '/historia/historia-1.jpg', alt: 'Liser Giménez en el obrador de Más Cuqui' },
+  { src: '/historia/historia-2.jpg', alt: 'Elaboración artesanal en Más Cuqui' },
+  { src: '/historia/historia-3.jpg', alt: 'Más Cuqui, nuestros inicios' },
 ];
 
 // ----------------------------------------------------------------
