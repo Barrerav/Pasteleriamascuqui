@@ -109,7 +109,7 @@ const jsonLd = {
     '@type': 'AggregateRating',
     ratingValue: '4.8',
     bestRating: '5',
-    ratingCount: '120',
+    ratingCount: '164',
   },
   priceRange: '€',
   servesCuisine: ['Pastelería', 'Venezolana', 'Café de especialidad'],

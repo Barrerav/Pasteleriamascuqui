@@ -3,33 +3,27 @@
 import Image from 'next/image';
 import { useState, useCallback, useEffect } from 'react';
 import { profile } from '@/data/profile';
-import { galleryPhotos, galleryCategoryLabels, type GalleryCategory } from '@/data/photos';
+import { galleryPhotos } from '@/data/photos';
 import { useReveal } from '@/hooks/useReveal';
 import { InstagramIcon, WhatsAppIcon } from '@/components/Icons';
 
 export default function Gallery() {
   const sectionRef = useReveal(0.05);
-  const [activeFilter, setActiveFilter] = useState<GalleryCategory>('all');
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
-
-  const filtered = activeFilter === 'all'
-    ? galleryPhotos
-    : galleryPhotos.filter((p) => p.cat === activeFilter);
 
   const openLightbox = (i: number) => setLightboxIndex(i);
   const closeLightbox = useCallback(() => setLightboxIndex(null), []);
 
   const goNext = useCallback(() => {
-    setLightboxIndex((prev) => (prev !== null ? (prev + 1) % filtered.length : null));
-  }, [filtered.length]);
+    setLightboxIndex((prev) => (prev !== null ? (prev + 1) % galleryPhotos.length : null));
+  }, []);
 
   const goPrev = useCallback(() => {
     setLightboxIndex((prev) =>
-      prev !== null ? (prev - 1 + filtered.length) % filtered.length : null
+      prev !== null ? (prev - 1 + galleryPhotos.length) % galleryPhotos.length : null
     );
-  }, [filtered.length]);
+  }, []);
 
-  // Keyboard navigation
   useEffect(() => {
     if (lightboxIndex === null) return;
     const onKey = (e: KeyboardEvent) => {
@@ -45,11 +39,6 @@ export default function Gallery() {
     };
   }, [lightboxIndex, closeLightbox, goNext, goPrev]);
 
-  // Reset lightbox when filter changes
-  useEffect(() => {
-    setLightboxIndex(null);
-  }, [activeFilter]);
-
   const isLarge = (i: number) => i % 6 === 0;
 
   return (
@@ -57,7 +46,7 @@ export default function Gallery() {
       <section id="galeria" ref={sectionRef} className="py-24 bg-white">
         <div className="max-w-6xl mx-auto px-6">
 
-          <div className="reveal text-center mb-8">
+          <div className="reveal text-center mb-12">
             <span className="text-rose font-semibold text-sm tracking-widest uppercase">Nuestros momentos</span>
             <h2 className="font-display text-3xl sm:text-4xl font-bold text-brown-dark mt-2">
               Galería
@@ -67,26 +56,9 @@ export default function Gallery() {
             </p>
           </div>
 
-          {/* Category filters */}
-          <div className="reveal flex flex-wrap gap-2 justify-center mb-10">
-            {(Object.keys(galleryCategoryLabels) as GalleryCategory[]).map((cat) => (
-              <button
-                key={cat}
-                onClick={() => setActiveFilter(cat)}
-                className={`px-4 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                  activeFilter === cat
-                    ? 'bg-rose text-white shadow-sm'
-                    : 'bg-pink-bg text-rose-dark border border-rose-light hover:bg-rose-light'
-                }`}
-              >
-                {galleryCategoryLabels[cat]}
-              </button>
-            ))}
-          </div>
-
           {/* Grid */}
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-            {filtered.map((post, i) => {
+            {galleryPhotos.map((post, i) => {
               const large = isLarge(i);
               return (
                 <button
@@ -134,13 +106,13 @@ export default function Gallery() {
       </section>
 
       {/* Lightbox */}
-      {lightboxIndex !== null && filtered[lightboxIndex] && (
+      {lightboxIndex !== null && galleryPhotos[lightboxIndex] && (
         <div
           className="lightbox-overlay fixed inset-0 z-[60] bg-brown-dark/90 backdrop-blur-sm flex items-center justify-center p-4"
           onClick={closeLightbox}
           role="dialog"
           aria-modal="true"
-          aria-label={`Foto: ${filtered[lightboxIndex].alt}`}
+          aria-label={`Foto: ${galleryPhotos[lightboxIndex].alt}`}
         >
           <div
             className="relative max-w-3xl w-full bg-white rounded-2xl overflow-hidden shadow-2xl"
@@ -148,8 +120,8 @@ export default function Gallery() {
           >
             <div className="relative aspect-square">
               <Image
-                src={filtered[lightboxIndex].src}
-                alt={filtered[lightboxIndex].alt}
+                src={galleryPhotos[lightboxIndex].src}
+                alt={galleryPhotos[lightboxIndex].alt}
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 768px"
@@ -158,9 +130,9 @@ export default function Gallery() {
             </div>
 
             <div className="p-5 flex items-center justify-between gap-4">
-              <p className="text-brown-dark font-medium text-sm">{filtered[lightboxIndex].alt}</p>
+              <p className="text-brown-dark font-medium text-sm">{galleryPhotos[lightboxIndex].alt}</p>
               <a
-                href={`https://wa.me/34${profile.whatsapp}?text=Hola!%20Me%20gustar%C3%ADa%20algo%20similar%20a%20la%20foto%20%22${encodeURIComponent(filtered[lightboxIndex].alt)}%22%20de%20vuestra%20galer%C3%ADa`}
+                href={`https://wa.me/34${profile.whatsapp}?text=Hola!%20Me%20gustar%C3%ADa%20algo%20similar%20a%20la%20foto%20%22${encodeURIComponent(galleryPhotos[lightboxIndex].alt)}%22%20de%20vuestra%20galer%C3%ADa`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="inline-flex items-center gap-2 bg-[#25D366] text-white text-sm font-semibold px-4 py-2 rounded-full hover:bg-[#1da851] transition-colors whitespace-nowrap flex-shrink-0"

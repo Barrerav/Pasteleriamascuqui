@@ -62,8 +62,16 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="border-t border-white/10 mt-8 pt-6 text-center text-xs text-white/60">
+        <div className="border-t border-white/10 mt-8 pt-6 flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-white/50">
           <p>© {year} {profile.name}. Todos los derechos reservados.</p>
+          <a
+            href="https://lumina-agency-landing-page.vercel.app/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hover:text-white/80 transition-colors"
+          >
+            Diseñado por <span className="font-semibold text-white/70">LUMINA</span>
+          </a>
         </div>
       </div>
     </footer>
