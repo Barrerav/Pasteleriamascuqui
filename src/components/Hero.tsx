@@ -30,7 +30,7 @@ export default function Hero() {
 
   return (
     <>
-      <section className="relative min-h-[78vh] flex items-center justify-center overflow-hidden pt-32 md:pt-48">
+      <section className="relative min-h-[78vh] flex items-center justify-center overflow-hidden pt-24 md:pt-32">
         {/* Video background */}
         <video
           src={heroConfig.videoSrc}
