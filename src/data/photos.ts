@@ -70,16 +70,16 @@ export const galleryCategoryLabels: Record<GalleryCategory, string> = {
 };
 
 export const galleryPhotos = [
-  { src: '/instagram/post-1.jpg',  alt: 'Iced lattes de verano',        cat: 'cafeteria'  as GalleryCategory },
-  { src: '/instagram/post-2.jpg',  alt: 'Desayuno artesanal',            cat: 'desayunos'  as GalleryCategory },
-  { src: '/instagram/post-3.jpg',  alt: '4to Aniversario',               cat: 'eventos'    as GalleryCategory },
+  { src: '/instagram/post-1.jpg',  alt: 'Tarta rosa 30 cumpleaños',      cat: 'pasteleria' as GalleryCategory },
+  { src: '/instagram/post-2.jpg',  alt: 'Tarta temática Nintendo Switch',cat: 'pasteleria' as GalleryCategory },
+  { src: '/instagram/post-3.jpg',  alt: 'Roscón de Reyes con corona',    cat: 'pasteleria' as GalleryCategory },
   { src: '/instagram/post-4.jpg',  alt: 'Arte latte',                    cat: 'cafeteria'  as GalleryCategory },
-  { src: '/instagram/post-5.jpg',  alt: 'Mocaccino vegetal',             cat: 'cafeteria'  as GalleryCategory },
+  { src: '/instagram/post-5.jpg',  alt: 'Cupcakes con corazones',        cat: 'pasteleria' as GalleryCategory },
   { src: '/instagram/post-6.jpg',  alt: 'Cachitos venezolanos',          cat: 'desayunos'  as GalleryCategory },
-  { src: '/instagram/post-7.jpg',  alt: 'Cappuccino rosa San Valentín',  cat: 'cafeteria'  as GalleryCategory },
-  { src: '/instagram/post-8.jpg',  alt: 'Obras en el local',             cat: 'eventos'    as GalleryCategory },
-  { src: '/instagram/post-9.jpg',  alt: 'Roscones de Reyes artesanales', cat: 'pasteleria' as GalleryCategory },
-  { src: '/instagram/post-10.jpg', alt: 'Café con nosotros',             cat: 'cafeteria'  as GalleryCategory },
-  { src: '/instagram/post-11.jpg', alt: 'Descubre Más Cuqui',            cat: 'eventos'    as GalleryCategory },
-  { src: '/instagram/post-12.jpg', alt: 'Buen comienzo de mes',          cat: 'pasteleria' as GalleryCategory },
+  { src: '/instagram/post-7.jpg',  alt: 'Rollos de jamón y queso',       cat: 'desayunos'  as GalleryCategory },
+  { src: '/instagram/post-8.jpg',  alt: 'Arte latte corazón rosa',       cat: 'cafeteria'  as GalleryCategory },
+  { src: '/instagram/post-9.jpg',  alt: 'Bollos suizos y café',          cat: 'desayunos'  as GalleryCategory },
+  { src: '/instagram/post-10.jpg', alt: 'Porciones de Roscón de Reyes',  cat: 'pasteleria' as GalleryCategory },
+  { src: '/instagram/post-11.jpg', alt: 'Tarta rosa con frutos rojos',   cat: 'pasteleria' as GalleryCategory },
+  { src: '/instagram/post-12.jpg', alt: 'Tarta temática Harry Potter',   cat: 'pasteleria' as GalleryCategory },
 ];
