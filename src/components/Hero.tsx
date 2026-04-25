@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import { useEffect, useRef } from 'react';
 import { profile } from '@/data/profile';
+import { WhatsAppIcon } from '@/components/Icons';
 
 function VerifiedBadge() {
   return (
@@ -20,18 +21,29 @@ export default function Hero() {
   useEffect(() => {
     const el = heroRef.current;
     if (!el) return;
+
+    // Respect reduced-motion preference
+    const motionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+    if (motionQuery.matches) return;
+
+    let rafId: number;
     const onScroll = () => {
-      const scrollY = window.scrollY;
-      el.style.transform = `translateY(${scrollY * 0.3}px)`;
+      rafId = requestAnimationFrame(() => {
+        const scrollY = window.scrollY;
+        el.style.transform = `translateY(${scrollY * 0.3}px)`;
+      });
     };
     window.addEventListener('scroll', onScroll, { passive: true });
-    return () => window.removeEventListener('scroll', onScroll);
+    return () => {
+      window.removeEventListener('scroll', onScroll);
+      cancelAnimationFrame(rafId);
+    };
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gradient-to-br from-cream via-pink-bg to-cream-dark pt-16">
+    <section className="relative min-h-dvh flex items-center justify-center overflow-hidden bg-gradient-to-br from-cream via-pink-bg to-cream-dark pt-16">
       {/* Parallax background blobs */}
-      <div ref={heroRef} className="absolute inset-0 pointer-events-none">
+      <div ref={heroRef} data-parallax className="absolute inset-0 pointer-events-none">
         <div className="absolute top-20 left-10 w-64 h-64 rounded-full bg-rose-light/40 blur-3xl" />
         <div className="absolute bottom-20 right-10 w-80 h-80 rounded-full bg-gold/20 blur-3xl" />
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-rose-light/20 blur-3xl" />
@@ -70,7 +82,7 @@ export default function Hero() {
                 ].map((s) => (
                   <div key={s.l} className="flex flex-col items-center min-w-0">
                     <span className="font-display text-lg font-bold text-brown-dark leading-tight">{s.v}</span>
-                    <span className="text-[10px] text-brown/60 leading-tight mt-0.5">{s.l}</span>
+                    <span className="text-xs text-brown-dark/70 leading-tight mt-0.5">{s.l}</span>
                   </div>
                 ))}
               </div>
@@ -90,20 +102,23 @@ export default function Hero() {
               >
                 @{profile.handle}
               </a>
-              <p className="text-xs text-brown/60 mt-0.5">{profile.category} · {profile.location}</p>
+              <p className="text-xs text-brown-dark/70 mt-0.5">{profile.category} · {profile.location}</p>
             </div>
 
             {/* Bio */}
             <p className="text-sm text-brown leading-relaxed">
               {profile.bio}
               <br />
-              <span className="text-brown/60">📲 WhatsApp para pedidos: {profile.whatsappDisplay}</span>
+              <span className="text-brown-dark/70">
+                <WhatsAppIcon className="w-3.5 h-3.5 inline mr-1 text-[#25D366]" />
+                WhatsApp para pedidos: {profile.whatsappDisplay}
+              </span>
             </p>
 
             {/* Action buttons */}
             <div className="flex gap-2">
               <a
-                href={`https://wa.me/34${profile.whatsapp}`}
+                href={`https://wa.me/34${profile.whatsapp}?text=Hola!%20Me%20gustar%C3%ADa%20hacer%20un%20pedido%20en%20M%C3%A1s%20Cuqui`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="flex-1 bg-rose text-white text-sm font-semibold py-2 rounded-lg text-center hover:bg-rose-dark transition-colors"
@@ -146,7 +161,10 @@ export default function Hero() {
         {/* Hero text */}
         <div className="flex-1 text-center lg:text-left space-y-6">
           <div className="inline-block bg-rose-light/60 text-rose-dark text-sm font-semibold px-4 py-1.5 rounded-full">
-            ✨ Obrador artesanal · Ciudad Real
+            <svg className="w-4 h-4 inline mr-1 -mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <path strokeLinecap="round" strokeLinejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09z" />
+            </svg>
+            Obrador artesanal · Ciudad Real
           </div>
           <h1 className="font-display text-4xl sm:text-5xl lg:text-6xl font-bold text-brown-dark leading-tight">
             Donde todo se<br />
@@ -156,40 +174,34 @@ export default function Hero() {
             Pastelería artesanal venezolana en el corazón de Ciudad Real. Sabores que nacen del alma latina con maestría pastelera europea.
           </p>
 
-          {/* Community total */}
-          <div className="flex items-center justify-center lg:justify-start gap-6 text-center">
-            {[
-              { red: 'Instagram', value: '3K', icon: '📸' },
-              { red: 'Facebook', value: '40K', icon: '📘' },
-              { red: 'TikTok', value: '@cuquipasteleria', icon: '🎵' },
-            ].map((r) => (
-              <div key={r.red} className="flex flex-col items-center">
-                <span className="text-lg">{r.icon}</span>
-                <span className="font-display text-base font-bold text-brown-dark">{r.value}</span>
-                <span className="text-xs text-brown/50">{r.red}</span>
-              </div>
-            ))}
+          {/* Opening hours badge */}
+          <div className="flex items-center justify-center lg:justify-start gap-3 bg-white/70 backdrop-blur-sm rounded-2xl px-5 py-3 max-w-sm mx-auto lg:mx-0 border border-rose-light/40">
+            <svg className="w-5 h-5 text-rose flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+              <circle cx="12" cy="12" r="10" />
+              <polyline points="12 6 12 12 16 14" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <div className="text-sm">
+              <p className="font-semibold text-brown-dark">L-V: 8:30–20:30 · S: 9:00–14:00</p>
+              <p className="text-brown-dark/60 text-xs">Domingos cerrado</p>
+            </div>
           </div>
 
           {/* CTAs */}
           <div className="flex flex-wrap items-center gap-4 justify-center lg:justify-start">
             <a
-              href={`https://wa.me/34${profile.whatsapp}`}
+              href={`https://wa.me/34${profile.whatsapp}?text=Hola!%20Me%20gustar%C3%ADa%20hacer%20un%20pedido%20en%20M%C3%A1s%20Cuqui`}
               target="_blank"
               rel="noopener noreferrer"
               className="bg-rose text-white font-semibold px-8 py-3 rounded-full hover:bg-rose-dark transition-colors shadow-lg shadow-rose/30 inline-flex items-center gap-2"
             >
-              <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z" />
-                <path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.553 4.113 1.523 5.844L.057 23.885a.5.5 0 0 0 .611.612l6.041-1.466A11.945 11.945 0 0 0 12 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.806 9.806 0 0 1-5.032-1.387l-.36-.214-3.736.906.923-3.736-.234-.372A9.818 9.818 0 0 1 2.182 12C2.182 6.567 6.567 2.182 12 2.182S21.818 6.567 21.818 12 17.433 21.818 12 21.818z" />
-              </svg>
+              <WhatsAppIcon className="w-5 h-5" />
               Hacer un pedido
             </a>
             <a
-              href="#galeria"
+              href="#carta"
               className="text-brown font-semibold px-6 py-3 rounded-full border-2 border-brown/20 hover:border-rose hover:text-rose transition-colors"
             >
-              Ver galería
+              Ver carta
             </a>
           </div>
         </div>
@@ -199,6 +211,7 @@ export default function Hero() {
       <a
         href="#sobre-nosotros"
         className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-1 text-brown/40 hover:text-rose transition-colors"
+        aria-label="Ir a la sección Sobre Nosotros"
       >
         <span className="text-xs font-medium tracking-widest uppercase">Descubrir</span>
         <svg className="w-4 h-4 animate-bounce" fill="none" viewBox="0 0 24 24" stroke="currentColor">

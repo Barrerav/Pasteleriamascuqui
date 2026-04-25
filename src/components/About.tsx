@@ -1,28 +1,12 @@
 'use client';
 
 import Image from 'next/image';
-import { useEffect, useRef } from 'react';
 import { profile } from '@/data/profile';
+import { useReveal } from '@/hooks/useReveal';
+import { MapPinIcon } from '@/components/Icons';
 
 export default function About() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('visible');
-          }
-        });
-      },
-      { threshold: 0.15 }
-    );
-
-    const els = sectionRef.current?.querySelectorAll('.reveal, .reveal-left, .reveal-right');
-    els?.forEach((el) => observer.observe(el));
-    return () => observer.disconnect();
-  }, []);
+  const sectionRef = useReveal(0.15);
 
   const badges = [
     'Obrador artesanal propio',
@@ -105,11 +89,11 @@ export default function About() {
             {/* Founded */}
             <div className="reveal stagger-3 flex items-center gap-4 pt-2">
               <div className="w-12 h-12 rounded-2xl bg-rose flex items-center justify-center flex-shrink-0">
-                <span className="text-white text-xl">🏡</span>
+                <MapPinIcon className="w-6 h-6 text-white" />
               </div>
               <div>
                 <p className="font-display text-base font-bold text-brown-dark">Calle Tinte, 17 Bajo</p>
-                <p className="text-sm text-brown/60">Ciudad Real · Desde {profile.founded}</p>
+                <p className="text-sm text-brown-dark/70">Ciudad Real · Desde {profile.founded}</p>
               </div>
             </div>
           </div>

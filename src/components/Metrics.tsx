@@ -35,7 +35,7 @@ function MetricCard({ value, label, suffix, active }: { value: number; label: st
         {display}
         <span className="text-gold">{suffix}</span>
       </div>
-      <p className="text-brown/70 text-sm mt-2 max-w-[120px] leading-snug">{label}</p>
+      <p className="text-white/80 text-sm mt-2 max-w-[120px] leading-snug">{label}</p>
     </div>
   );
 }

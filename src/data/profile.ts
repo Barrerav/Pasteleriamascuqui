@@ -13,6 +13,7 @@ export const profile = {
   yearsActive: 4,
   chef: 'Liser Giménez',
   profileImage: '/instagram/profile.jpg',
+  ogImage: '/instagram/post-1.jpg',
   stats: {
     posts: 166,
     followers: '3.082',
@@ -23,12 +24,12 @@ export const profile = {
     facebook: 'https://www.facebook.com/101758689422174/',
     tiktok: 'https://www.tiktok.com/@cuquipasteleria',
   },
-  networkFollowers: {
-    instagram: '3K',
-    facebook: '40K',
-    tiktok: '@cuquipasteleria',
-  },
   googleRating: 4.8,
+  schedule: [
+    { days: 'Lunes a Viernes', hours: '8:30 – 20:30' },
+    { days: 'Sábados', hours: '9:00 – 14:00' },
+    { days: 'Domingos', hours: 'Cerrado' },
+  ],
   posts: [
     { src: '/instagram/post-1.jpg', alt: 'Iced lattes de verano' },
     { src: '/instagram/post-2.jpg', alt: 'Desayuno artesanal' },
@@ -47,28 +48,52 @@ export const profile = {
     {
       title: 'Cafetería',
       description: 'Café de especialidad, iced lattes de temporada, bebidas vegetales y arte latte hecho a mano.',
-      icon: '☕',
+      icon: 'coffee',
+      priceRange: 'Desde 1,50 €',
     },
     {
       title: 'Pastelería artesanal',
       description: 'Tartas personalizadas, tres leches, roscones de reyes y dulces de temporada elaborados desde cero.',
-      icon: '🍰',
+      icon: 'cake',
+      priceRange: 'Desde 25 €',
     },
     {
       title: 'Desayunos',
       description: 'Desayunos completos con tostadas, croissants, bollería fresca y los auténticos cachitos venezolanos.',
-      icon: '🥐',
+      icon: 'croissant',
+      priceRange: 'Desde 3,50 €',
     },
     {
       title: 'Pedidos personalizados',
       description: 'Tartas y dulces a medida para celebraciones. Consulta disponibilidad y precio por WhatsApp.',
-      icon: '🎂',
+      icon: 'gift',
+      priceRange: 'Consultar',
+    },
+  ],
+  testimonials: [
+    {
+      text: 'Las mejores tartas de Ciudad Real, sin duda. Pedimos una tarta personalizada para el cumpleaños de mi hija y fue una obra de arte. ¡Repetiremos seguro!',
+      author: 'María G.',
+      rating: 5,
+      source: 'Google',
+    },
+    {
+      text: 'El café es espectacular y los cachitos venezolanos están para morirse. Un sitio con mucho encanto y un trato familiar increíble.',
+      author: 'Carlos R.',
+      rating: 5,
+      source: 'Google',
+    },
+    {
+      text: 'Descubrimos Más Cuqui por Instagram y no nos decepcionó. Todo está buenísimo y se nota que lo hacen con mucho cariño. La tres leches es adictiva.',
+      author: 'Laura M.',
+      rating: 5,
+      source: 'Google',
     },
   ],
   metrics: [
     { value: 4, label: 'Años endulzando Ciudad Real', suffix: '' },
-    { value: 40, label: 'K seguidores en Facebook', suffix: 'K' },
     { value: 3, label: 'K comunidad en Instagram', suffix: 'K' },
+    { value: 166, label: 'Publicaciones en redes', suffix: '' },
     { value: 4.8, label: 'Estrellas en Google Maps', suffix: '★' },
   ],
 };
