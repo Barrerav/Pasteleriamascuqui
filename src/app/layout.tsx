@@ -48,20 +48,11 @@ export const metadata: Metadata = {
     siteName: 'Más Cuqui',
     locale: 'es_ES',
     type: 'website',
-    images: [
-      {
-        url: '/instagram/post-1.jpg',
-        width: 1200,
-        height: 630,
-        alt: 'Pastelería Más Cuqui — Tartas artesanales en Ciudad Real',
-      },
-    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Más Cuqui — Pastelería & Cafetería Artesanal',
     description: 'Tartas personalizadas y café de especialidad en Ciudad Real.',
-    images: ['/instagram/post-1.jpg'],
   },
 };
 
