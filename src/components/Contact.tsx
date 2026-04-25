@@ -7,31 +7,7 @@ import { ClockIcon, InstagramIcon } from '@/components/Icons';
 export default function Contact() {
   const sectionRef = useReveal(0.1);
 
-  const socials = [
-    {
-      name: 'Instagram',
-      href: profile.networks.instagram,
-      icon: <InstagramIcon className="w-5 h-5" />,
-    },
-    {
-      name: 'Facebook',
-      href: profile.networks.facebook,
-      icon: (
-        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
-        </svg>
-      ),
-    },
-    {
-      name: 'TikTok',
-      href: profile.networks.tiktok,
-      icon: (
-        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.34 6.34 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.75a8.27 8.27 0 004.84 1.54V6.85a4.85 4.85 0 01-1.07-.16z" />
-        </svg>
-      ),
-    },
-  ];
+
 
   return (
     <section id="contacto" ref={sectionRef} className="py-24 bg-cream">
@@ -114,25 +90,7 @@ export default function Contact() {
               </ul>
             </div>
 
-            {/* Social links */}
-            <div className="bg-white rounded-2xl p-6 shadow-sm border border-rose-light/30">
-              <h3 className="font-display text-lg font-bold text-brown-dark mb-4">Síguenos</h3>
-              <div className="flex gap-3">
-                {socials.map((s) => (
-                  <a
-                    key={s.name}
-                    href={s.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex-1 flex items-center justify-center gap-2 bg-cream-dark text-brown font-semibold text-sm py-2.5 rounded-xl hover:bg-rose hover:text-white transition-all"
-                    aria-label={`Ir a ${s.name}`}
-                  >
-                    {s.icon}
-                    <span className="hidden sm:inline">{s.name}</span>
-                  </a>
-                ))}
-              </div>
-            </div>
+
           </div>
 
           {/* Map + Instagram CTA */}

@@ -19,6 +19,10 @@ const siteUrl = 'https://pasteleriamascuqui.com';
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
   title: '+Cuqui - Pastelería Creativa',
+  icons: {
+    icon: '/instagram/profile.jpg',
+    apple: '/instagram/profile.jpg',
+  },
   description:
     'Cafetería y pastelería artesanal en Ciudad Real. Tartas personalizadas, café de especialidad, desayunos y dulces venezolanos elaborados con amor desde 2022. Calle Tinte 17.',
   keywords: [
