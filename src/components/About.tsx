@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { profile } from '@/data/profile';
+import { historyPhotos } from '@/data/photos';
 import { useReveal } from '@/hooks/useReveal';
 import { MapPinIcon } from '@/components/Icons';
 
@@ -26,8 +27,8 @@ export default function About() {
           <div className="reveal-left grid grid-cols-2 gap-3">
             <div className="col-span-2 relative h-64 rounded-2xl overflow-hidden">
               <Image
-                src={profile.posts[3].src}
-                alt="Arte latte en Más Cuqui"
+                src={historyPhotos[0].src}
+                alt={historyPhotos[0].alt}
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 100vw, 50vw"
@@ -35,8 +36,8 @@ export default function About() {
             </div>
             <div className="relative h-44 rounded-2xl overflow-hidden">
               <Image
-                src={profile.posts[1].src}
-                alt="Desayuno artesanal"
+                src={historyPhotos[1].src}
+                alt={historyPhotos[1].alt}
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 50vw, 25vw"
@@ -44,8 +45,8 @@ export default function About() {
             </div>
             <div className="relative h-44 rounded-2xl overflow-hidden">
               <Image
-                src={profile.posts[2].src}
-                alt="4 años juntos"
+                src={historyPhotos[2].src}
+                alt={historyPhotos[2].alt}
                 fill
                 className="object-cover"
                 sizes="(max-width: 768px) 50vw, 25vw"

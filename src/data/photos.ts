@@ -1,3 +1,9 @@
+export const historyPhotos = [
+  { src: '/instagram/post-4.jpg', alt: 'Arte latte en Más Cuqui' },
+  { src: '/instagram/post-2.jpg', alt: 'Desayuno artesanal' },
+  { src: '/instagram/post-5.jpg', alt: 'Mocaccino vegetal' },
+]
+
 export const heroConfig = {
   videoSrc: '/videos/hero.mp4',
   posterSrc: '/instagram/post-1.jpg',
@@ -14,10 +20,10 @@ export type GalleryCategory = 'all' | 'cafeteria' | 'pasteleria' | 'desayunos' |
 
 export const galleryCategoryLabels: Record<GalleryCategory, string> = {
   all:        'Todos',
-  cafeteria:  'Cafetería',
-  pasteleria: 'Pastelería',
-  desayunos:  'Desayunos',
-  eventos:    'Eventos',
+  cafeteria:  '☕ Cafetería',
+  pasteleria: '🎂 Pastelería',
+  desayunos:  '🥐 Desayunos',
+  eventos:    '🎉 Eventos',
 }
 
 export const galleryPhotos = [
