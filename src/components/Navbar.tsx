@@ -76,9 +76,9 @@ export default function Navbar() {
             <Image 
               src="/images/logo.png" 
               alt="Más Cuqui Logo" 
-              width={120} 
-              height={40} 
-              className="h-10 w-auto object-contain"
+              width={160} 
+              height={56} 
+              className="h-12 md:h-14 w-auto object-contain"
               priority
             />
           </a>
